@@ -1,0 +1,48 @@
+{
+  "name": "simple-pbx",
+  "version": "1.0.0",
+  "description": "A Simple PBX based on realtime asterisk and agi",
+  "private": true,
+  "scripts": {
+    "dev:agi": "tsx packages/simple-pbx-agi/agi-server.ts",
+    "dev:web": "npm run dev --workspace packages/web",
+    "dev:web1": "npm run dev --workspace packages/web1",
+    "start:web": "npm run start --workspace packages/simple-pbx-web",
+    "typecheck:web": "npm run typecheck --workspace packages/simple-pbx-web",
+    "build:web": "npm run build --workspace packages/simple-pbx-web",
+    "db:migrate": "cd prisma && prisma migrate dev",
+    "db:studio": "cd prisma && prisma studio",
+    "db:seed": "tsx prisma/seed.ts",
+    "test:web": "npm run test --workspace packages/simple-pbx-web",
+    "test:agi": "npm run test --workspace packages/simple-pbx-agi"
+  },
+  "author": "Omer Tatar",
+  "license": "ISC",
+  "workspaces": [
+    "packages/simple-pbx-agi",
+    "packages/web"
+  ],
+  "dependencies": {
+    "@prisma/client": "^6.9.0",
+    "tsx": "^4.19.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "@types/node": "^24.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.34.0",
+    "@typescript-eslint/parser": "^8.34.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.2.0",
+    "prettier": "^3.5.3",
+    "prisma": "^6.5.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript-eslint": "^8.34.0",
+    "vite": "^5.4.11",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.1.1",
+    "vitest-mock-extended": "^3.1.0"
+  }
+}

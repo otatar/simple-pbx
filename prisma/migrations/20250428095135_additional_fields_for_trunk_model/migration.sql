@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `Trunk` ADD COLUMN `password` VARCHAR(191) NULL DEFAULT '',
+    ADD COLUMN `qualifyFrequency` INTEGER NULL DEFAULT 60,
+    ADD COLUMN `username` VARCHAR(191) NULL DEFAULT '';

@@ -1,0 +1,264 @@
+CREATE TABLE ps_endpoints (
+    id VARCHAR(255) NOT NULL, 
+    transport VARCHAR(40), 
+    aors VARCHAR(2048), 
+    auth VARCHAR(255), 
+    context VARCHAR(40), 
+    disallow VARCHAR(200), 
+    allow VARCHAR(200), 
+    direct_media ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    connected_line_method ENUM('invite','reinvite','update'), 
+    direct_media_method ENUM('invite','reinvite','update'), 
+    direct_media_glare_mitigation ENUM('none','outgoing','incoming'), 
+    disable_direct_media_on_nat ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    dtmf_mode ENUM('rfc4733','inband','info', 'auto') NULL, 
+    external_media_address VARCHAR(40), 
+    force_rport ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    ice_support ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    identify_by VARCHAR(80) NULL, 
+    mailboxes VARCHAR(40), 
+    moh_suggest VARCHAR(40), 
+    outbound_auth VARCHAR(255), 
+    outbound_proxy VARCHAR(255), 
+    rewrite_contact ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    rtp_ipv6 ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    rtp_symmetric ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    send_diversion ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    send_pai ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    send_rpid ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    timers_min_se INTEGER, 
+    timers ENUM('forced','no','required','yes'), 
+    timers_sess_expires INTEGER, 
+    callerid VARCHAR(40), 
+    callerid_privacy ENUM('allowed_not_screened','allowed_passed_screened','allowed_failed_screened','allowed','prohib_not_screened','prohib_passed_screened','prohib_failed_screened','prohib','unavailable'), 
+    callerid_tag VARCHAR(40), 
+    `100rel` ENUM('no','required','peer_supported','yes'), 
+    aggregate_mwi ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    trust_id_inbound ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    trust_id_outbound ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    use_ptime ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    use_avpf ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    media_encryption ENUM('no','sdes','dtls'), 
+    inband_progress ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    call_group VARCHAR(40), 
+    pickup_group VARCHAR(40), 
+    named_call_group VARCHAR(40), 
+    named_pickup_group VARCHAR(40), 
+    device_state_busy_at INTEGER, 
+    fax_detect ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    t38_udptl ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    t38_udptl_ec ENUM('none','fec','redundancy'), 
+    t38_udptl_maxdatagram INTEGER, 
+    t38_udptl_nat ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    t38_udptl_ipv6 ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    tone_zone VARCHAR(40), 
+    language VARCHAR(40), 
+    one_touch_recording ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    record_on_feature VARCHAR(40), 
+    record_off_feature VARCHAR(40), 
+    rtp_engine VARCHAR(40), 
+    allow_transfer ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    allow_subscribe ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    sdp_owner VARCHAR(40), 
+    sdp_session VARCHAR(40) NULL, 
+    tos_audio VARCHAR(10) NULL, 
+    tos_video VARCHAR(10) NULL, 
+    cos_audio INTEGER, 
+    cos_video INTEGER, 
+    sub_min_expiry INTEGER, 
+    from_domain VARCHAR(40), 
+    from_user VARCHAR(40), 
+    mwi_from_user VARCHAR(40), 
+    dtls_verify VARCHAR(40), 
+    dtls_rekey VARCHAR(40), 
+    dtls_cert_file VARCHAR(200), 
+    dtls_private_key VARCHAR(200), 
+    dtls_cipher VARCHAR(200), 
+    dtls_ca_file VARCHAR(200), 
+    dtls_ca_path VARCHAR(200), 
+    dtls_setup ENUM('active','passive','actpass'), 
+    srtp_tag_32 ENUM('0','1','off','on','false','true','no','yes') NULL,
+    media_address VARCHAR(40),
+    redirect_method ENUM('user','uri_core','uri_pjsip'),
+    set_var TEXT,
+    message_context VARCHAR(40),
+    force_avp ENUM('0','1','off','on','false','true','no','yes') NULL,
+    media_use_received_transport ENUM('0','1','off','on','false','true','no','yes') NULL,
+    accountcode VARCHAR(80),
+    user_eq_phone ENUM('0','1','off','on','false','true','no','yes') NULL,
+    moh_passthrough ENUM('0','1','off','on','false','true','no','yes') NULL,
+    media_encryption_optimistic ENUM('0','1','off','on','false','true','no','yes') NULL,
+    rpid_immediate ENUM('0','1','off','on','false','true','no','yes') NULL,
+    g726_non_standard ENUM('0','1','off','on','false','true','no','yes') NULL,
+    rtp_keepalive INTEGER,
+    rtp_timeout INTEGER,
+    rtp_timeout_hold INTEGER,
+    bind_rtp_to_media_address ENUM('0','1','off','on','false','true','no','yes') NULL,
+    voicemail_extension VARCHAR(40),
+    mwi_subscribe_replaces_unsolicited INTEGER,
+    deny VARCHAR(95),
+    permit VARCHAR(95),
+    acl VARCHAR(40),
+    contact_deny VARCHAR(95),
+    contact_permit VARCHAR(95),
+    contact_acl VARCHAR(40),
+    subscribe_context VARCHAR(40),
+    fax_detect_timeout INTEGER,
+    contact_user VARCHAR(80),
+    preferred_codec_only ENUM('0','1','off','on','false','true','no','yes') NULL,
+    asymmetric_rtp_codec ENUM('0','1','off','on','false','true','no','yes') NULL,
+    rtcp_mux ENUM('0','1','off','on','false','true','no','yes') NULL,
+    allow_overlap ENUM('0','1','off','on','false','true','no','yes') NULL,
+    refer_blind_progress ENUM('0','1','off','on','false','true','no','yes') NULL,
+    notify_early_inuse_ringing ENUM('0','1','off','on','false','true','no','yes') NULL,
+    max_audio_streams INTEGER,
+    max_video_streams INTEGER,
+    webrtc ENUM('0','1','off','on','false','true','no','yes') NULL,
+    dtls_fingerprint ENUM('SHA-1','SHA-256'),
+    incoming_mwi_mailbox VARCHAR(40),
+    bundle ENUM('0','1','off','on','false','true','no','yes') NULL,
+    dtls_auto_generate_cert ENUM('0','1','off','on','false','true','no','yes') NULL,
+    follow_early_media_fork ENUM('0','1','off','on','false','true','no','yes') NULL,
+    accept_multiple_sdp_answers ENUM('0','1','off','on','false','true','no','yes') NULL,
+    suppress_q850_reason_headers ENUM('0','1','off','on','false','true','no','yes') NULL,
+    mwi_subscribe_replaces_unsolicited ENUM('0','1','off','on','false','true','no','yes') NULL,
+    trust_connected_line ENUM('0','1','off','on','false','true','no','yes'),
+    send_connected_line ENUM('0','1','off','on','false','true','no','yes'),
+    ignore_183_without_sdp ENUM('0','1','off','on','false','true','no','yes'),    
+    codec_prefs_incoming_offer VARCHAR(128),
+    codec_prefs_outgoing_offer VARCHAR(128),
+    codec_prefs_incoming_answer VARCHAR(128),
+    codec_prefs_outgoing_answer VARCHAR(128),
+    stir_shaken ENUM('0','1','off','on','false','true','no','yes'),
+    send_history_info ENUM('0','1','off','on','false','true','no','yes'),
+    allow_unauthenticated_options ENUM('0','1','off','on','false','true','no','yes'),
+    t38_bind_udptl_to_media_address ENUM('0','1','off','on','false','true','no','yes'),
+    geoloc_incoming_call_profile VARCHAR(80),
+    geoloc_outgoing_call_profile VARCHAR(80),
+    incoming_call_offer_pref ENUM('local','local_first','remote','remote_first'),
+    outgoing_call_offer_pref ENUM('local','local_merge','local_first','remote','remote_merge','remote_first'),
+    stir_shaken_profile VARCHAR(80),
+    security_negotiation ENUM('no','mediasec'),
+    security_mechanisms VARCHAR(512),
+    send_aoc ENUM('0','1','off','on','false','true','no','yes'),
+    overlap_context VARCHAR(80),
+    tenantid VARCHAR(80),
+    UNIQUE (id)
+);
+
+CREATE INDEX ps_endpoints_id ON ps_endpoints (id);
+
+
+# ps_auths
+CREATE TABLE ps_auths (
+    id VARCHAR(255) NOT NULL, 
+    auth_type ENUM('md5','userpass','google_oauth') NULL, 
+    nonce_lifetime INTEGER, 
+    md5_cred VARCHAR(40), 
+    password VARCHAR(80), 
+    realm VARCHAR(255), 
+    username VARCHAR(40), 
+    refresh_token VARCHAR(255),
+    oauth_clientid VARCHAR(255),
+    oauth_secret VARCHAR(255)
+    UNIQUE (id)
+);
+
+CREATE INDEX ps_auths_id ON ps_auths (id);
+
+
+
+# ps_aors
+CREATE TABLE ps_aors (
+    id VARCHAR(255) NOT NULL, 
+    contact VARCHAR(255), 
+    default_expiration INTEGER, 
+    mailboxes VARCHAR(80), 
+    max_contacts INTEGER, 
+    minimum_expiration INTEGER, 
+    remove_existing ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    qualify_frequency INTEGER, 
+    authenticate_qualify ENUM('0','1','off','on','false','true','no','yes') NULL, 
+    maximum_expiration INTEGER,
+    outbound_proxy VARCHAR(255) NULL,
+    support_path ENUM('0','1','off','on','false','true','no','yes') NULL,
+    qualify_timeout FLOAT NULL,
+    voicemail_extension VARCHAR(40),
+    remove_unavailable ENUM('0','1','off','on','false','true','no','yes'),
+    UNIQUE (id)
+);
+
+CREATE INDEX ps_aors_id ON ps_aors (id);
+CREATE INDEX ps_aors_qualifyfreq_contact ON ps_aors (qualify_frequency, contact);
+
+
+
+# ps_domain_aliases
+CREATE TABLE ps_domain_aliases (
+    id VARCHAR(255) NOT NULL, 
+    domain VARCHAR(255), 
+    UNIQUE (id)
+);
+
+CREATE INDEX ps_domain_aliases_id ON ps_domain_aliases (id);
+
+
+
+# ps_contacts
+CREATE TABLE ps_contacts (
+    id VARCHAR(255) NOT NULL, 
+    uri VARCHAR(511) NULL, 
+    expiration_time VBIGINT NULL, 
+    qualify_frequency INTEGER, 
+    outbound_proxy VARCHAR(255) NULL,
+    path TEXT,
+    user_agent VARCHAR(255),
+    qualify_timeout FLOAT NULL,
+    reg_server VARCHAR(255) NULL,
+    authenticate_qualify ENUM('0','1','off','on','false','true','no','yes') NULL,
+    via_addr VARCHAR(40),
+    via_port INTEGER,
+    call_id VARCHAR(255),
+    endpoint VARCHAR(255) NULL,
+    prune_on_boot ENUM('0','1','off','on','false','true','no','yes') NULL,
+    UNIQUE (id)
+);
+
+CREATE INDEX ps_contacts_id ON ps_contacts (id);
+ALTER TABLE ps_contacts ADD CONSTRAINT ps_contacts_uq UNIQUE (id, reg_server);
+CREATE INDEX ps_contacts_qualifyfreq_exp ON ps_contacts (qualify_frequency, expiration_time);
+
+
+# ps_endpoint_id_ips
+CREATE TABLE ps_endpoint_id_ips (
+    id VARCHAR(255) NOT NULL, 
+    endpoint VARCHAR(255) NULL, 
+    `match` VARCHAR(80), 
+    match_header VARCHAR(255),
+    match_request_uri VARCHAR(255),
+    srv_lookups ENUM('0','1','off','on','false','true','no','yes') NULL,
+    UNIQUE (id)
+);
+
+CREATE INDEX ps_endpoint_id_ips_id ON ps_endpoint_id_ips (id);
+
+
+CREATE TABLE `ps_registration` (
+  `id` VARCHAR(40) NOT NULL,
+  `transport` VARCHAR(40) DEFAULT NULL,
+  `outbound_auth` VARCHAR(40) DEFAULT NULL,
+  `server_uri` VARCHAR(255) NOT NULL,
+  `client_uri` VARCHAR(255) NOT NULL,
+  `contact_user` VARCHAR(40) DEFAULT NULL,
+  `retry_interval` INT DEFAULT NULL,
+  `forbidden_retry_interval` INT DEFAULT NULL,
+  `expiration` INT DEFAULT NULL,
+  `max_retries` INT DEFAULT NULL,
+  `retry_interval` INT DEFAULT NULL,
+  `forbidden_retry_interval` INT DEFAULT NULL,
+  `expiration` INT DEFAULT NULL,
+  `max_retries` INT DEFAULT NULL,
+  `line` VARCHAR(40) DEFAULT NULL,
+  `endpoint` VARCHAR(40) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);

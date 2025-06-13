@@ -1,0 +1,1195 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ExtensionTemplate {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  createdBy String?
+}
+
+model Extension {
+  id         Int            @id @default(autoincrement())
+  name       String?
+  email      String?
+  extension  String         @unique
+  password   String
+  cos        ClassOfService @relation(fields: [cosId], references: [id])
+  cosId      Int
+  callRecord YesNo?         @default(no)
+  language   String?        @default("en")
+  phoneBook  YesNo?         @default(yes)
+  createdAt  DateTime       @default(now())
+  createdBy  String?
+}
+
+model TrunkGroup {
+  id     Int             @id @default(autoincrement())
+  name   String?
+  trunks Trunk[]
+  routes OutgoingRoute[]
+
+  IncomingRoute IncomingRoute[]
+}
+
+model Trunk {
+  id                         Int                  @id @default(autoincrement())
+  name                       String               @unique
+  provider                   String?              @default("")
+  host                       String               @default("")
+  port                       Int?                 @default(5060)
+  username                   String?              @default("")
+  password                   String?              @default("")
+  registration               YesNo                @default(no)
+  serverUri                  String?              @default("")
+  clientUri                  String?              @default("")
+  qualifyFrequency           Int?                 @default(60)
+  createdAt                  DateTime             @default(now())
+  createdBy                  String?
+  trunkGroups                TrunkGroup[]
+  Route                      OutgoingRoute[]
+  OutgoingNumberManipulation NumberManipulation[]
+  IncomingRoute              IncomingRoute[]
+}
+
+model OutgoingRoute {
+  id              Int             @id @default(autoincrement())
+  name            String?
+  prefix          String          @unique
+  destinationType DestinationType
+  trunk           Trunk?          @relation(fields: [trunkId], references: [id])
+  trunkId         Int?
+  trunkGroup      TrunkGroup?     @relation(fields: [trunkGroupId], references: [id])
+  trunkGroupId    Int?
+  cos             ClassOfService  @relation(fields: [cosId], references: [id])
+  cosId           Int
+  createdAt       DateTime        @default(now())
+  createdBy       String?
+}
+
+model IncomingRoute {
+  id              Int             @id @default(autoincrement())
+  name            String?
+  prefix          String          @unique
+  destinationType DestinationType
+  trunk           Trunk?          @relation(fields: [trunkId], references: [id])
+  trunkId         Int?
+  trunkGroup      TrunkGroup?     @relation(fields: [trunkGroupId], references: [id])
+  trunkGroupId    Int?
+  createdAt       DateTime        @default(now())
+  createdBy       String?
+}
+
+model Cdr {
+  id               Int      @id @default(autoincrement())
+  startTime        DateTime @default(now())
+  duration         Int?     @default(0)
+  dialStatus       String?  @default("")
+  origANumber      String?  @default("") @db.VarChar(80)
+  origBNumber      String?  @default("") @db.VarChar(80)
+  manANumber       String?  @default("") @db.VarChar(80)
+  manBNumber       String?  @default("") @db.VarChar(80)
+  sourceType       String?  @default("") @db.VarChar(80)
+  destinationType  String?  @default("") @db.VarChar(80)
+  sourceTrunk      String?  @default("") @db.VarChar(80)
+  destinationTrunk String?  @default("") @db.VarChar(80)
+}
+
+enum DestinationType {
+  extension
+  trunk
+  trunkGroup
+  queue
+}
+
+model ClassOfService {
+  id        Int             @id @default(autoincrement())
+  name      String?
+  cos       Int
+  createdAt DateTime        @default(now())
+  createdBy String?
+  Route     OutgoingRoute[]
+  Extension Extension[]
+}
+
+model NumberManipulation {
+  id         Int                    @id @default(autoincrement())
+  name       String                 @unique
+  priority   Int                    @default(1)
+  type       NumberManipulationType
+  direction  DirectionType          @default(inbound)
+  match      String?                @default("")
+  stripBegin Int                    @default(0)
+  stripEnd   Int                    @default(0)
+  prepend    String?                @default("")
+  append     String?                @default("")
+  trunk      Trunk                  @relation(fields: [trunkId], references: [id])
+  trunkId    Int
+  createdAt  DateTime               @default(now())
+  createdBy  String?
+}
+
+enum NumberManipulationType {
+  aNumber
+  bNumber
+}
+
+enum DirectionType {
+  inbound
+  outbound
+}
+
+enum YesNo {
+  yes
+  no
+}
+
+model GlobalSettings {
+  id              Int      @id @default(autoincrement())
+  ringTimeout     Int?     @default(40)
+  maxCallDuration Int?     @default(18000)
+  subBranding     String?  @default("")
+  createdAt       DateTime @default(now())
+  createdBy       String?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model cdr {
+  accountcode String?   @db.VarChar(80)
+  src         String?   @db.VarChar(80)
+  dst         String?   @db.VarChar(80)
+  dcontext    String?   @db.VarChar(80)
+  clid        String?   @db.VarChar(80)
+  channel     String?   @db.VarChar(80)
+  dstchannel  String?   @db.VarChar(80)
+  lastapp     String?   @db.VarChar(80)
+  lastdata    String?   @db.VarChar(80)
+  start       DateTime? @db.DateTime(0)
+  answer      DateTime? @db.DateTime(0)
+  end         DateTime? @db.DateTime(0)
+  duration    Int?
+  billsec     Int?
+  disposition String?   @db.VarChar(45)
+  amaflags    String?   @db.VarChar(45)
+  userfield   String?   @db.VarChar(256)
+  uniqueid    String?   @db.VarChar(150)
+  linkedid    String?   @db.VarChar(150)
+  peeraccount String?   @db.VarChar(80)
+  sequence    Int?
+
+  @@ignore
+}
+
+model ps_aors {
+  id                   String                        @unique(map: "id") @db.VarChar(255)
+  contact              String?                       @db.VarChar(255)
+  default_expiration   Int?
+  mailboxes            String?                       @db.VarChar(80)
+  max_contacts         Int?
+  minimum_expiration   Int?
+  remove_existing      ps_aors_remove_existing?
+  qualify_frequency    Int?
+  authenticate_qualify ps_aors_authenticate_qualify?
+  maximum_expiration   Int?
+  outbound_proxy       String?                       @db.VarChar(255)
+  support_path         ps_aors_support_path?
+  qualify_timeout      Float?                        @db.Float
+  voicemail_extension  String?                       @db.VarChar(40)
+  remove_unavailable   ps_aors_remove_unavailable?
+
+  @@index([id], map: "ps_aors_id")
+  @@index([qualify_frequency, contact], map: "ps_aors_qualifyfreq_contact")
+}
+
+model ps_auths {
+  id             String              @unique(map: "id") @db.VarChar(255)
+  auth_type      ps_auths_auth_type?
+  nonce_lifetime Int?
+  md5_cred       String?             @db.VarChar(40)
+  password       String?             @db.VarChar(80)
+  realm          String?             @db.VarChar(255)
+  username       String?             @db.VarChar(40)
+  refresh_token  String?             @db.VarChar(255)
+  oauth_clientid String?             @db.VarChar(255)
+  oauth_secret   String?             @db.VarChar(255)
+
+  @@index([id], map: "ps_auths_id")
+}
+
+model ps_contacts {
+  id                   String                            @unique(map: "id") @db.VarChar(255)
+  uri                  String?                           @db.VarChar(511)
+  expiration_time      BigInt?
+  qualify_frequency    Int?
+  outbound_proxy       String?                           @db.VarChar(255)
+  path                 String?                           @db.Text
+  user_agent           String?                           @db.VarChar(255)
+  qualify_timeout      Float?                            @db.Float
+  reg_server           String?                           @db.VarChar(255)
+  authenticate_qualify ps_contacts_authenticate_qualify?
+  via_addr             String?                           @db.VarChar(40)
+  via_port             Int?
+  call_id              String?                           @db.VarChar(255)
+  endpoint             String?                           @db.VarChar(255)
+  prune_on_boot        ps_contacts_prune_on_boot?
+
+  @@unique([id, reg_server], map: "ps_contacts_uq")
+  @@index([id], map: "ps_contacts_id")
+  @@index([qualify_frequency, expiration_time], map: "ps_contacts_qualifyfreq_exp")
+}
+
+model ps_domain_aliases {
+  id     String  @unique(map: "id") @db.VarChar(255)
+  domain String? @db.VarChar(255)
+
+  @@index([id], map: "ps_domain_aliases_id")
+}
+
+model ps_endpoint_id_ips {
+  id                String                          @unique(map: "id") @db.VarChar(255)
+  endpoint          String?                         @db.VarChar(255)
+  match             String?                         @db.VarChar(80)
+  match_header      String?                         @db.VarChar(255)
+  match_request_uri String?                         @db.VarChar(255)
+  srv_lookups       ps_endpoint_id_ips_srv_lookups?
+
+  @@index([id], map: "ps_endpoint_id_ips_id")
+}
+
+model ps_endpoints {
+  id                                 String                                           @unique(map: "id") @db.VarChar(255)
+  transport                          String?                                          @db.VarChar(40)
+  aors                               String?                                          @db.VarChar(2048)
+  auth                               String?                                          @db.VarChar(255)
+  context                            String?                                          @db.VarChar(40)
+  disallow                           String?                                          @db.VarChar(200)
+  allow                              String?                                          @db.VarChar(200)
+  direct_media                       ps_endpoints_direct_media?
+  connected_line_method              ps_endpoints_connected_line_method?
+  direct_media_method                ps_endpoints_direct_media_method?
+  direct_media_glare_mitigation      ps_endpoints_direct_media_glare_mitigation?
+  disable_direct_media_on_nat        ps_endpoints_disable_direct_media_on_nat?
+  dtmf_mode                          ps_endpoints_dtmf_mode?
+  external_media_address             String?                                          @db.VarChar(40)
+  force_rport                        ps_endpoints_force_rport?
+  ice_support                        ps_endpoints_ice_support?
+  identify_by                        String?                                          @db.VarChar(80)
+  mailboxes                          String?                                          @db.VarChar(40)
+  moh_suggest                        String?                                          @db.VarChar(40)
+  outbound_auth                      String?                                          @db.VarChar(255)
+  outbound_proxy                     String?                                          @db.VarChar(255)
+  rewrite_contact                    ps_endpoints_rewrite_contact?
+  rtp_ipv6                           ps_endpoints_rtp_ipv6?
+  rtp_symmetric                      ps_endpoints_rtp_symmetric?
+  send_diversion                     ps_endpoints_send_diversion?
+  send_pai                           ps_endpoints_send_pai?
+  send_rpid                          ps_endpoints_send_rpid?
+  timers_min_se                      Int?
+  timers                             ps_endpoints_timers?
+  timers_sess_expires                Int?
+  callerid                           String?                                          @db.VarChar(40)
+  callerid_privacy                   ps_endpoints_callerid_privacy?
+  callerid_tag                       String?                                          @db.VarChar(40)
+  rel                                ps_endpoints_100rel?                             @map("100rel")
+  aggregate_mwi                      ps_endpoints_aggregate_mwi?
+  trust_id_inbound                   ps_endpoints_trust_id_inbound?
+  trust_id_outbound                  ps_endpoints_trust_id_outbound?
+  use_ptime                          ps_endpoints_use_ptime?
+  use_avpf                           ps_endpoints_use_avpf?
+  media_encryption                   ps_endpoints_media_encryption?
+  inband_progress                    ps_endpoints_inband_progress?
+  call_group                         String?                                          @db.VarChar(40)
+  pickup_group                       String?                                          @db.VarChar(40)
+  named_call_group                   String?                                          @db.VarChar(40)
+  named_pickup_group                 String?                                          @db.VarChar(40)
+  device_state_busy_at               Int?
+  fax_detect                         ps_endpoints_fax_detect?
+  t38_udptl                          ps_endpoints_t38_udptl?
+  t38_udptl_ec                       ps_endpoints_t38_udptl_ec?
+  t38_udptl_maxdatagram              Int?
+  t38_udptl_nat                      ps_endpoints_t38_udptl_nat?
+  t38_udptl_ipv6                     ps_endpoints_t38_udptl_ipv6?
+  tone_zone                          String?                                          @db.VarChar(40)
+  language                           String?                                          @db.VarChar(40)
+  one_touch_recording                ps_endpoints_one_touch_recording?
+  record_on_feature                  String?                                          @db.VarChar(40)
+  record_off_feature                 String?                                          @db.VarChar(40)
+  rtp_engine                         String?                                          @db.VarChar(40)
+  allow_transfer                     ps_endpoints_allow_transfer?
+  allow_subscribe                    ps_endpoints_allow_subscribe?
+  sdp_owner                          String?                                          @db.VarChar(40)
+  sdp_session                        String?                                          @db.VarChar(40)
+  tos_audio                          String?                                          @db.VarChar(10)
+  tos_video                          String?                                          @db.VarChar(10)
+  cos_audio                          Int?
+  cos_video                          Int?
+  sub_min_expiry                     Int?
+  from_domain                        String?                                          @db.VarChar(40)
+  from_user                          String?                                          @db.VarChar(40)
+  mwi_from_user                      String?                                          @db.VarChar(40)
+  dtls_verify                        String?                                          @db.VarChar(40)
+  dtls_rekey                         String?                                          @db.VarChar(40)
+  dtls_cert_file                     String?                                          @db.VarChar(200)
+  dtls_private_key                   String?                                          @db.VarChar(200)
+  dtls_cipher                        String?                                          @db.VarChar(200)
+  dtls_ca_file                       String?                                          @db.VarChar(200)
+  dtls_ca_path                       String?                                          @db.VarChar(200)
+  dtls_setup                         ps_endpoints_dtls_setup?
+  srtp_tag_32                        ps_endpoints_srtp_tag_32?
+  media_address                      String?                                          @db.VarChar(40)
+  redirect_method                    ps_endpoints_redirect_method?
+  set_var                            String?                                          @db.Text
+  message_context                    String?                                          @db.VarChar(40)
+  force_avp                          ps_endpoints_force_avp?
+  media_use_received_transport       ps_endpoints_media_use_received_transport?
+  accountcode                        String?                                          @db.VarChar(80)
+  user_eq_phone                      ps_endpoints_user_eq_phone?
+  moh_passthrough                    ps_endpoints_moh_passthrough?
+  media_encryption_optimistic        ps_endpoints_media_encryption_optimistic?
+  rpid_immediate                     ps_endpoints_rpid_immediate?
+  g726_non_standard                  ps_endpoints_g726_non_standard?
+  rtp_keepalive                      Int?
+  rtp_timeout                        Int?
+  rtp_timeout_hold                   Int?
+  bind_rtp_to_media_address          ps_endpoints_bind_rtp_to_media_address?
+  voicemail_extension                String?                                          @db.VarChar(40)
+  deny                               String?                                          @db.VarChar(95)
+  permit                             String?                                          @db.VarChar(95)
+  acl                                String?                                          @db.VarChar(40)
+  contact_deny                       String?                                          @db.VarChar(95)
+  contact_permit                     String?                                          @db.VarChar(95)
+  contact_acl                        String?                                          @db.VarChar(40)
+  subscribe_context                  String?                                          @db.VarChar(40)
+  fax_detect_timeout                 Int?
+  contact_user                       String?                                          @db.VarChar(80)
+  preferred_codec_only               ps_endpoints_preferred_codec_only?
+  asymmetric_rtp_codec               ps_endpoints_asymmetric_rtp_codec?
+  rtcp_mux                           ps_endpoints_rtcp_mux?
+  allow_overlap                      ps_endpoints_allow_overlap?
+  refer_blind_progress               ps_endpoints_refer_blind_progress?
+  notify_early_inuse_ringing         ps_endpoints_notify_early_inuse_ringing?
+  max_audio_streams                  Int?
+  max_video_streams                  Int?
+  webrtc                             ps_endpoints_webrtc?
+  dtls_fingerprint                   ps_endpoints_dtls_fingerprint?
+  incoming_mwi_mailbox               String?                                          @db.VarChar(40)
+  bundle                             ps_endpoints_bundle?
+  dtls_auto_generate_cert            ps_endpoints_dtls_auto_generate_cert?
+  follow_early_media_fork            ps_endpoints_follow_early_media_fork?
+  accept_multiple_sdp_answers        ps_endpoints_accept_multiple_sdp_answers?
+  suppress_q850_reason_headers       ps_endpoints_suppress_q850_reason_headers?
+  mwi_subscribe_replaces_unsolicited ps_endpoints_mwi_subscribe_replaces_unsolicited?
+  trust_connected_line               ps_endpoints_trust_connected_line?
+  send_connected_line                ps_endpoints_send_connected_line?
+  ignore_183_without_sdp             ps_endpoints_ignore_183_without_sdp?
+  codec_prefs_incoming_offer         String?                                          @db.VarChar(128)
+  codec_prefs_outgoing_offer         String?                                          @db.VarChar(128)
+  codec_prefs_incoming_answer        String?                                          @db.VarChar(128)
+  codec_prefs_outgoing_answer        String?                                          @db.VarChar(128)
+  stir_shaken                        ps_endpoints_stir_shaken?
+  send_history_info                  ps_endpoints_send_history_info?
+  allow_unauthenticated_options      ps_endpoints_allow_unauthenticated_options?
+  t38_bind_udptl_to_media_address    ps_endpoints_t38_bind_udptl_to_media_address?
+  geoloc_incoming_call_profile       String?                                          @db.VarChar(80)
+  geoloc_outgoing_call_profile       String?                                          @db.VarChar(80)
+  incoming_call_offer_pref           ps_endpoints_incoming_call_offer_pref?
+  outgoing_call_offer_pref           ps_endpoints_outgoing_call_offer_pref?
+  stir_shaken_profile                String?                                          @db.VarChar(80)
+  security_negotiation               ps_endpoints_security_negotiation?
+  security_mechanisms                String?                                          @db.VarChar(512)
+  send_aoc                           ps_endpoints_send_aoc?
+  overlap_context                    String?                                          @db.VarChar(80)
+  tenantid                           String?                                          @db.VarChar(80)
+
+  @@index([id], map: "ps_endpoints_id")
+}
+
+model ps_registrations {
+  id                       String  @unique(map: "id") @db.VarChar(255)
+  transport                String? @db.VarChar(40)
+  outbound_auth            String? @db.VarChar(255)
+  contact_user             String? @db.VarChar(80)
+  client_uri               String? @db.VarChar(255)
+  server_uri               String? @db.VarChar(255)
+  retry_interval           Int?
+  expiration               Int?
+  forbidden_retry_interval Int?
+  max_retries              Int?
+  endpoint                 String? @db.VarChar(40)
+
+  @@index([id], map: "ps_registrations_id")
+}
+
+enum ps_auths_auth_type {
+  md5
+  userpass
+  google_oauth
+}
+
+enum ps_endpoints_connected_line_method {
+  invite
+  reinvite
+  update
+}
+
+enum ps_endpoints_direct_media_method {
+  invite
+  reinvite
+  update
+}
+
+enum ps_endpoints_direct_media_glare_mitigation {
+  none
+  outgoing
+  incoming
+}
+
+enum ps_endpoints_dtmf_mode {
+  rfc4733
+  inband
+  info
+  auto
+}
+
+enum ps_endpoints_timers {
+  forced
+  no
+  required
+  yes
+}
+
+enum ps_endpoints_callerid_privacy {
+  allowed_not_screened
+  allowed_passed_screened
+  allowed_failed_screened
+  allowed
+  prohib_not_screened
+  prohib_passed_screened
+  prohib_failed_screened
+  prohib
+  unavailable
+}
+
+enum ps_endpoints_100rel {
+  no
+  required
+  peer_supported
+  yes
+}
+
+enum ps_endpoints_media_encryption {
+  no
+  sdes
+  dtls
+}
+
+enum ps_endpoints_t38_udptl_ec {
+  none
+  fec
+  redundancy
+}
+
+enum ps_endpoints_dtls_setup {
+  active
+  passive
+  actpass
+}
+
+enum ps_endpoints_redirect_method {
+  user
+  uri_core
+  uri_pjsip
+}
+
+enum ps_endpoints_dtls_fingerprint {
+  SHA_1   @map("SHA-1")
+  SHA_256 @map("SHA-256")
+}
+
+enum ps_endpoints_incoming_call_offer_pref {
+  local
+  local_first
+  remote
+  remote_first
+}
+
+enum ps_endpoints_outgoing_call_offer_pref {
+  local
+  local_merge
+  local_first
+  remote
+  remote_merge
+  remote_first
+}
+
+enum ps_endpoints_security_negotiation {
+  no
+  mediasec
+}
+
+enum ps_endpoint_id_ips_srv_lookups {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_aors_remove_existing {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_direct_media {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_aors_authenticate_qualify {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_contacts_authenticate_qualify {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_aors_support_path {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_disable_direct_media_on_nat {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_aors_remove_unavailable {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_contacts_prune_on_boot {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_force_rport {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_ice_support {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_rewrite_contact {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_rtp_ipv6 {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_rtp_symmetric {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_send_diversion {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_send_pai {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_send_rpid {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_aggregate_mwi {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_trust_id_inbound {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_trust_id_outbound {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_use_ptime {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_use_avpf {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_inband_progress {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_fax_detect {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_t38_udptl {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_t38_udptl_nat {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_t38_udptl_ipv6 {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_one_touch_recording {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_allow_transfer {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_allow_subscribe {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_srtp_tag_32 {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_force_avp {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_media_use_received_transport {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_user_eq_phone {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_moh_passthrough {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_media_encryption_optimistic {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_rpid_immediate {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_g726_non_standard {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_bind_rtp_to_media_address {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_preferred_codec_only {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_asymmetric_rtp_codec {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_rtcp_mux {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_allow_overlap {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_refer_blind_progress {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_notify_early_inuse_ringing {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_webrtc {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_bundle {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_dtls_auto_generate_cert {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_follow_early_media_fork {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_accept_multiple_sdp_answers {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_suppress_q850_reason_headers {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_mwi_subscribe_replaces_unsolicited {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_trust_connected_line {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_send_connected_line {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_ignore_183_without_sdp {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_stir_shaken {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_send_history_info {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_allow_unauthenticated_options {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_t38_bind_udptl_to_media_address {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}
+
+enum ps_endpoints_send_aoc {
+  // 0 @map("0")
+  // 1 @map("1")
+  off
+  on
+  false
+  true
+  no
+  yes
+}

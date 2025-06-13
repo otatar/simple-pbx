@@ -1,0 +1,17 @@
+{
+  "name": "simple-pbx-agi",
+  "version": "1.0.0",
+  "main": "agi-server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "tslog": "^4.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.24"
+  },
+  "author": "Omer Tatar",
+  "license": "ISC",
+  "description": ""
+}
