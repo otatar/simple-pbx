@@ -74,7 +74,7 @@ export async function createTrunk(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    },
+    }
 ) {
   // We will use a transaction because we need to create more records in the database
   try {
@@ -107,6 +107,12 @@ export async function createTrunk(
           username: trunk.username,
         },
       }),
+      db.ps_endpoint_id_ips.create({
+        data: {
+          id: trunk.name,
+          match: trunk.host,
+        },
+      }),
       trunk.registration
         ? db.ps_registrations.create({
             data: {
@@ -129,12 +135,7 @@ export async function createTrunk(
           auth: trunk.name,
           context: "internal",
           disallow: "all",
-          allow: [
-            trunk.codec_1,
-            trunk.codec_2,
-            trunk.codec_3,
-            trunk.codec_4,
-          ].join(","),
+          allow: [trunk.codec_1, trunk.codec_2, trunk.codec_3, trunk.codec_4].join(","),
           max_audio_streams: trunk.max_audio_streams,
           max_video_streams: trunk.max_video_streams,
           dtmf_mode: trunk.dtmf_mode,
@@ -163,7 +164,7 @@ export async function updateTrunk(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    },
+    }
 ) {
   // We will use a transaction because we need to create more records in the database
   try {
@@ -195,6 +196,12 @@ export async function updateTrunk(
           username: trunk.username,
         },
       }),
+      db.ps_endpoint_id_ips.update({
+        where: { id: trunk.name },
+        data: {
+          match: trunk.host,
+        },
+      }),
       trunk.registration
         ? db.ps_registrations.update({
             where: { id: trunk.name },
@@ -214,12 +221,7 @@ export async function updateTrunk(
         data: {
           transport: trunk.transport,
           disallow: "all",
-          allow: [
-            trunk.codec_1,
-            trunk.codec_2,
-            trunk.codec_3,
-            trunk.codec_4,
-          ].join(","),
+          allow: [trunk.codec_1, trunk.codec_2, trunk.codec_3, trunk.codec_4].join(","),
           max_audio_streams: trunk.max_audio_streams,
           max_video_streams: trunk.max_video_streams,
           dtmf_mode: trunk.dtmf_mode,
@@ -261,9 +263,15 @@ export async function deleteTrunk(id: number) {
       db.ps_endpoints.delete({
         where: { id: trunk.name },
       }),
+      db.ps_endpoint_id_ips.delete({
+        where: { id: trunk.name },
+      }),
+      db.ps_registrations.delete({
+        where: { id: trunk.name },
+      }),
     ]);
   } catch (error) {
-    console.error("Failed to delete extension: " + error);
-    throw new Error("Error deleting extension");
+    console.error("Failed to delete trunk: " + error);
+    throw new Error("Error deleting trunk");
   }
 }

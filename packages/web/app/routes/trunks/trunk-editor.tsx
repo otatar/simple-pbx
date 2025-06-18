@@ -3,13 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRemixForm, RemixFormProvider } from "remix-hook-form";
 
 import { Form, Link } from "react-router";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useDelayedIsPending } from "~/utils/misc";
@@ -23,11 +17,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import type { NumberManipulation, ps_endpoints, Trunk } from "@prisma/client";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "~/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Separator } from "~/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import NumberManipulationTable from "./num-man-table";
@@ -68,17 +58,11 @@ export const schema = z.object({
   name: z.string().min(1, "Name is required"),
   provider: z.string().optional(),
   host: z.string().min(1, "Host is required"),
-  port: z.number({ required_error: "Port is required" }).min(0),
+  port: z.coerce.number({ required_error: "Port is required" }).min(0),
   username: z.string().optional(),
   password: z.string().optional(),
-  max_audio_streams: z.coerce
-    .number()
-    .min(0, "Max audio streams is required")
-    .optional(),
-  max_video_streams: z.coerce
-    .number()
-    .min(0, "Max video streams is required")
-    .optional(),
+  max_audio_streams: z.coerce.number().min(0, "Max audio streams is required").optional(),
+  max_video_streams: z.coerce.number().min(0, "Max video streams is required").optional(),
   registration: z.enum(yesOrNo),
   serverUri: z.string().optional(),
   clientUri: z.string().optional(),
@@ -113,10 +97,7 @@ type TrunkEditorProps = {
   numberManipulations?: NumberManipulation[];
 };
 
-export default function TrunkEditor({
-  trunk,
-  numberManipulations,
-}: TrunkEditorProps) {
+export default function TrunkEditor({ trunk, numberManipulations }: TrunkEditorProps) {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isOutNumManOpen, setIsOutNumManOpen] = useState(false);
 
@@ -177,12 +158,7 @@ export default function TrunkEditor({
                   <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                     <FormLabel>ID:</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        disabled
-                        className="bg-gray-100"
-                      />
+                      <Input type="number" {...field} disabled className="bg-gray-100" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -272,10 +248,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Registration:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -372,10 +345,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Transport:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -409,10 +379,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>DTMF Mode:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -436,10 +403,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 1:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -463,10 +427,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 2:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -490,10 +451,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 3:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -517,10 +475,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 4:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -544,10 +499,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Direct Media:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -568,10 +520,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Direct Media Method:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -595,10 +544,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Ice Support:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -619,10 +565,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Rewrite Contact:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -643,10 +586,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>WebRTC:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -667,10 +607,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Ice Send Diversion:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -691,10 +628,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Send PAI:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -715,10 +649,7 @@ export default function TrunkEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Send RPID:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -737,9 +668,7 @@ export default function TrunkEditor({
           </Collapsible>
           <div className="flex items-center justify-start space-x-2 w-full border-t pt-2 mt-4">
             <Button type="submit">
-              {isSubmitting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {trunk ? "Update" : "Create"}
             </Button>
             <Link to=".." relative="path">
