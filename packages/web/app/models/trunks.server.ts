@@ -111,6 +111,7 @@ export async function createTrunk(
         data: {
           id: trunk.name,
           match: trunk.host,
+          endpoint: trunk.name,
         },
       }),
       trunk.registration
@@ -200,6 +201,7 @@ export async function updateTrunk(
         where: { id: trunk.name },
         data: {
           match: trunk.host,
+          endpoint: trunk.name,
         },
       }),
       trunk.registration
