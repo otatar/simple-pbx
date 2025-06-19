@@ -75,10 +75,13 @@ agi.on("call", async (call: AGIChannel) => {
     }
 
     log.info("Call to", simpleCall.callDestination.type);
+    if (simpleCall.callDestination.type === "extension") {
+      simpleCall.manBNumber = simpleCall.callDestination.destination.extension;
+    }
 
     //Do the calling
     log.debug(
-      `The call from trunk: ${simpleCall.callSource.source.name} to: ${simpleCall.manBNumber}`
+      `The call from trunk: ${simpleCall.callSource.source.name} to ${simpleCall.callDestination.type} ${simpleCall.manBNumber}`
     );
     const dialString = await simpleCall.getDialString();
     await call.Set(`CALLERID(number)=${simpleCall.manANumber}`);

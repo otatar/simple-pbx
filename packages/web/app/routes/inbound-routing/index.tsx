@@ -2,13 +2,7 @@ import { BookOpen, Trash2 } from "lucide-react";
 import { Outlet, useNavigate, useSubmit } from "react-router";
 import { DataTable, generateColumnHeaders } from "~/components/data-table";
 import DeleteAlert from "~/components/delete-alert";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import type { Route } from "./+types";
 import { useState } from "react";
 import { getInboundRoutes } from "~/models/inbound-routing.server";
@@ -19,6 +13,7 @@ const columnsArray = [
   { key: "prefix", title: "Prefix" },
   { key: "destinationType", title: "Destination Type" },
   { key: "trunk", title: "Trunk" },
+  { key: "extension", title: "Extension" },
 ];
 
 const columns = generateColumnHeaders(columnsArray);
@@ -39,10 +34,7 @@ export default function InboundRouting({ loaderData }: Route.ComponentProps) {
   };
   const onDetails = (id: string) => navigate(`/inbound-routing/${id}`);
   const onDeleteConfirmation = () => {
-    submit(
-      {},
-      { action: `/inbound-routing/${selectedEntry}`, method: "delete" },
-    );
+    submit({}, { action: `/inbound-routing/${selectedEntry}`, method: "delete" });
   };
   const serializedData = loaderData.map((ext) => {
     return { ...ext, createdAt: ext.createdAt.toISOString() };

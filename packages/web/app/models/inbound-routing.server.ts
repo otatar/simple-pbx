@@ -16,7 +16,7 @@ export async function getInboundRoutes() {
       },
       extension: {
         select: {
-          name: true,
+          extension: true,
         },
       },
     },
@@ -27,7 +27,7 @@ export async function getInboundRoutes() {
       ...route,
       trunk: route.trunk ? route.trunk.name : null,
       trunkGroup: route.trunkGroup ? route.trunkGroup.name : null,
-      extension: route.extension ? route.extension.name : null,
+      extension: route.extension ? route.extension.extension : null,
     };
   });
 
