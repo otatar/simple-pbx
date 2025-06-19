@@ -190,6 +190,7 @@ export class SimpleCall {
           this.callDestination.destination = await db.extension.findUnique({
             where: { id: route.extensionId! },
           });
+          this.callDestination.type = route.destinationType;
           if (!this.callDestination.destination) {
             log.warn("Cannot find extension in database with id: ", route.extensionId);
             this.callDestination.type = "unknown";
