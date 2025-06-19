@@ -190,25 +190,23 @@ export class SimpleCall {
           this.callDestination.destination = await db.extension.findUnique({
             where: { id: route.extensionId! },
           });
-          this.callDestination.type = route.destinationType;
+
           if (!this.callDestination.destination) {
             log.warn("Cannot find extension in database with id: ", route.extensionId);
             this.callDestination.type = "unknown";
           }
-          //we found something, break
-          break;
+          this.callDestination.type = "extension";
         }
+        //we found something, break
+        break;
       }
-      if (this.callDestination.type === undefined) {
-        log.info(
-          "There is no route in the database to destination phone number: ",
-          this.manBNumber
-        );
-        this.callDestination = {
-          type: "unknown",
-          destination: null,
-        };
-      }
+    }
+    if (this.callDestination.type === undefined) {
+      log.info("There is no route in the database to destination phone number: ", this.manBNumber);
+      this.callDestination = {
+        type: "unknown",
+        destination: null,
+      };
     }
   }
 
@@ -314,7 +312,7 @@ export class SimpleCall {
       ? globalSettings.maxCallDuration * 1000
       : 5 * 60 * 60 * 1000;
     if (this.callDestination.type === "extension") {
-      dialString = `PJSIP/${this.manBNumber},${timeout},L(${maxCallDuration})g`;
+      dialString = `PJSIP/${this.callDestination.destination.extension},${timeout},L(${maxCallDuration})g`;
     } else if (this.callDestination.type === "trunk") {
       dialString = `PJSIP/${this.manBNumber}@${this.callDestination.destination.name},${timeout},L(${maxCallDuration})g`;
     } else if (this.callDestination.type === "trunkGroup") {
