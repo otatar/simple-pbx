@@ -28,6 +28,8 @@ model Extension {
   phoneBook  YesNo?         @default(yes)
   createdAt  DateTime       @default(now())
   createdBy  String?
+
+  IncomingRoute IncomingRoute[]
 }
 
 model TrunkGroup {
@@ -84,6 +86,8 @@ model IncomingRoute {
   trunkId         Int?
   trunkGroup      TrunkGroup?     @relation(fields: [trunkGroupId], references: [id])
   trunkGroupId    Int?
+  extension        Extension?     @relation(fields: [extensionId], references: [id])
+  extensionId     Int?
   createdAt       DateTime        @default(now())
   createdBy       String?
 }

@@ -1,18 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { IncomingRoute, Trunk, TrunkGroup } from "@prisma/client";
+import type { Extension, IncomingRoute, Trunk, TrunkGroup } from "@prisma/client";
 import { Loader2, Terminal } from "lucide-react";
 import { Form, Link } from "react-router";
 import { RemixFormProvider, useRemixForm } from "remix-hook-form";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import {
   Select,
@@ -37,6 +31,7 @@ export const schema = z.object({
   }),
   trunkId: z.coerce.number().optional(),
   trunkGroupId: z.coerce.number().optional(),
+  extensionId: z.coerce.number().optional(),
 });
 export type FormData = z.infer<typeof schema>;
 export const resolver = zodResolver(schema);
@@ -45,6 +40,7 @@ interface InboundRouteEditorProps {
   route?: IncomingRoute;
   trunks: Trunk[];
   trunkGroups: TrunkGroup[];
+  extensions: Omit<Extension, "password">[];
 }
 
 export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
@@ -58,6 +54,7 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
       destinationType: props.route?.destinationType ?? "trunk",
       trunkId: props.route?.trunkId ?? undefined,
       trunkGroupId: props.route?.trunkGroupId ?? undefined,
+      extensionId: props.route?.extensionId ?? undefined,
     },
     submitConfig: {
       method: props.route ? "PUT" : "POST",
@@ -68,15 +65,9 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
   return (
     <>
       {props.route ? (
-        <Title
-          title="Update inbound route"
-          text="Here you can update route data!"
-        />
+        <Title title="Update inbound route" text="Here you can update route data!" />
       ) : (
-        <Title
-          title="Create inbound route"
-          text="Here you can create a inbound route!"
-        />
+        <Title title="Create inbound route" text="Here you can create a inbound route!" />
       )}
       <RemixFormProvider {...form}>
         <Form onSubmit={form.handleSubmit}>
@@ -89,12 +80,7 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
                   <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                     <FormLabel>ID:</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        disabled
-                        className="bg-gray-100"
-                      />
+                      <Input type="number" {...field} disabled className="bg-gray-100" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -132,10 +118,7 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Destination Type:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -155,14 +138,35 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
               />
               <FormField
                 control={form.control}
+                name="extensionId"
+                render={({ field }) => (
+                  <FormItem className="inline-form-item w-full">
+                    <FormLabel>Extension:</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {props.extensions.map((ext) => (
+                          <SelectItem key={ext.id} value={ext.id.toString()}>
+                            {ext.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="trunkId"
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Trunk:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -170,10 +174,7 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
                       </FormControl>
                       <SelectContent>
                         {props.trunks.map((trunk) => (
-                          <SelectItem
-                            key={trunk.id}
-                            value={trunk.id.toString()}
-                          >
+                          <SelectItem key={trunk.id} value={trunk.id.toString()}>
                             {trunk.name}
                           </SelectItem>
                         ))}
@@ -189,10 +190,7 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Trunk Group:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -214,9 +212,7 @@ export default function OutboundRouteEditor(props: InboundRouteEditorProps) {
           </div>
           <div className="flex items-center justify-start space-x-2 w-full border-t pt-2 mt-4">
             <Button type="submit">
-              {isSubmitting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {props.route ? "Update" : "Create"}
             </Button>
             <Link to=".." relative="path">

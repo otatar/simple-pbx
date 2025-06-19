@@ -62,7 +62,7 @@ agi.on("call", async (call: AGIChannel) => {
     log.info("Call from trunk, incoming call");
 
     //Number manipulation
-    await simpleCall.numberManipulation();
+    await simpleCall.numberManipulation("inbound");
 
     //Incoming routing
     await simpleCall.incomingCallRouting();

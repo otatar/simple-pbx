@@ -14,6 +14,11 @@ export async function getInboundRoutes() {
           name: true,
         },
       },
+      extension: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
 
@@ -22,6 +27,7 @@ export async function getInboundRoutes() {
       ...route,
       trunk: route.trunk ? route.trunk.name : null,
       trunkGroup: route.trunkGroup ? route.trunkGroup.name : null,
+      extension: route.extension ? route.extension.name : null,
     };
   });
 
@@ -44,18 +50,15 @@ export async function getInboundRoute(id: number) {
   });
 }
 
-export async function createInboundRoute(
-  route: Prisma.IncomingRouteUncheckedCreateInput,
-) {
+export async function createInboundRoute(route: Prisma.IncomingRouteUncheckedCreateInput) {
   return await db.incomingRoute.create({
     data: {
       name: route.name,
       prefix: route.prefix,
       destinationType: route.destinationType,
       trunk: route.trunkId ? { connect: { id: route.trunkId } } : undefined,
-      trunkGroup: route.trunkGroupId
-        ? { connect: { id: route.trunkGroupId } }
-        : undefined,
+      trunkGroup: route.trunkGroupId ? { connect: { id: route.trunkGroupId } } : undefined,
+      extension: route.extensionId ? { connect: { id: route.extensionId } } : undefined,
     },
   });
 }

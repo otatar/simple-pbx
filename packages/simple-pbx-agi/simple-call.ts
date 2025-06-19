@@ -153,54 +153,51 @@ export class SimpleCall {
 
   async incomingCallRouting() {
     log.debug("Incoming call routing starting...");
-    //Check if this is a call to extension
-    const extension = await db.extension.findFirst({
-      where: {
-        extension: this.manBNumber,
-      },
-    });
-    if (extension) {
-      log.info("Call to extension:", extension);
-      this.callDestination.type = "extension";
-      this.callDestination.destination = extension;
-    } else {
-      log.debug("Looking in incoming routes from database");
-      const routes = await db.incomingRoute.findMany({});
 
-      for (const route of routes) {
-        log.trace(
-          `Trying to get match for called number: ${this.manBNumber} and route prefix: ${route.prefix}`
-        );
-        const routeMatch = this.isRouteMatch(this.manBNumber!, route.prefix);
-        if (routeMatch) {
-          //Bingo
-          log.trace("We have a match with route:", route);
-          if (route.destinationType == "trunk") {
-            // Handle destination trunk
-            this.callDestination.destination = await db.trunk.findUnique({
-              where: { id: route.trunkId! },
-            });
-            if (!this.callDestination.destination) {
-              log.warn("Cannot find trunk in database with id: ", route.trunkId);
-              this.callDestination.type = "unknown";
-            }
-            this.callDestination.type = route.destinationType;
-            log.trace("Destination trunk:", this.callDestination);
-          } else if (route.destinationType == "trunkGroup") {
-            // Handle destination group
-            this.callDestination.destination = await db.trunkGroup.findUnique({
-              where: { id: route.trunkGroupId! },
-            });
-            if (!this.callDestination.destination) {
-              log.warn("Cannot find trunk group in database with id: ", route.trunkGroupId);
-              this.callDestination.type = "unknown";
-            }
+    log.debug("Looking in incoming routes from database");
+    const routes = await db.incomingRoute.findMany({});
+
+    for (const route of routes) {
+      log.trace(
+        `Trying to get match for called number: ${this.manBNumber} and route prefix: ${route.prefix}`
+      );
+      const routeMatch = this.isRouteMatch(this.manBNumber!, route.prefix);
+      if (routeMatch) {
+        //Bingo
+        log.trace("We have a match with route:", route);
+        if (route.destinationType == "trunk") {
+          // Handle destination trunk
+          this.callDestination.destination = await db.trunk.findUnique({
+            where: { id: route.trunkId! },
+          });
+          if (!this.callDestination.destination) {
+            log.warn("Cannot find trunk in database with id: ", route.trunkId);
+            this.callDestination.type = "unknown";
+          }
+          this.callDestination.type = route.destinationType;
+          log.trace("Destination trunk:", this.callDestination);
+        } else if (route.destinationType == "trunkGroup") {
+          // Handle destination group
+          this.callDestination.destination = await db.trunkGroup.findUnique({
+            where: { id: route.trunkGroupId! },
+          });
+          if (!this.callDestination.destination) {
+            log.warn("Cannot find trunk group in database with id: ", route.trunkGroupId);
+            this.callDestination.type = "unknown";
+          }
+        } else if (route.destinationType == "extension") {
+          // Handle destination extension
+          this.callDestination.destination = await db.extension.findUnique({
+            where: { id: route.extensionId! },
+          });
+          if (!this.callDestination.destination) {
+            log.warn("Cannot find extension in database with id: ", route.extensionId);
+            this.callDestination.type = "unknown";
           }
           //we found something, break
           break;
         }
       }
-      log.debug("No match for incoming route, setting destination to unknown");
       if (this.callDestination.type === undefined) {
         log.info(
           "There is no route in the database to destination phone number: ",

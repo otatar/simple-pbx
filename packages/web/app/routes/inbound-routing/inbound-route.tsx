@@ -5,10 +5,7 @@ import CustomErrorBoundary from "~/components/custom-error-boundary";
 import { getValidatedFormData } from "remix-hook-form";
 import { getTrunks } from "~/models/trunks.server";
 import type { TrunkGroup } from "@prisma/client";
-import InboundRouteEditor, {
-  resolver,
-  type FormData,
-} from "./inbound-route-editor";
+import InboundRouteEditor, { resolver, type FormData } from "./inbound-route-editor";
 import type { Route } from "./+types/inbound-route";
 import {
   checkInboundRoute,
@@ -16,6 +13,7 @@ import {
   getInboundRoute,
   updateInboundRoute,
 } from "~/models/inbound-routing.server";
+import { getExtensions } from "~/models/extensions.server";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   invariantResponse(params.id, "ID is required");
@@ -23,8 +21,9 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const outboundRoute = await getInboundRoute(id);
   invariantResponse(outboundRoute, "Inbound route not found", { status: 404 });
   const trunks = await getTrunks();
+  const extensions = await getExtensions();
   const trunkGroups = [] as TrunkGroup[];
-  return { outboundRoute, trunks, trunkGroups };
+  return { outboundRoute, trunks, extensions, trunkGroups };
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
@@ -72,6 +71,7 @@ export default function InboundRoute({ loaderData }: Route.ComponentProps) {
       route={loaderData.outboundRoute}
       trunks={loaderData.trunks}
       trunkGroups={loaderData.trunkGroups}
+      extensions={loaderData.extensions}
     />
   );
 }
