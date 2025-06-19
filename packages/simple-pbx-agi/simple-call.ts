@@ -34,22 +34,23 @@ export class SimpleCall {
         this.callSource.type = "trunk";
         this.callSource.source = trunk;
       }
-    }
-    //Possible call from extension
-    log.trace("Checking for extension in DB");
-    const extension = await db.extension.findFirst({
-      include: { cos: true },
-      where: {
-        extension: this.origANumber,
-      },
-    });
-
-    if (extension) {
-      this.callSource.type = "extension";
-      this.callSource.source = extension;
     } else {
-      log.warn("Unknown call source, call from: ", this.origANumber);
-      this.callSource.type = "unknown";
+      //Possible call from extension
+      log.trace("Checking for extension in DB");
+      const extension = await db.extension.findFirst({
+        include: { cos: true },
+        where: {
+          extension: this.origANumber,
+        },
+      });
+
+      if (extension) {
+        this.callSource.type = "extension";
+        this.callSource.source = extension;
+      } else {
+        log.warn("Unknown call source, call from: ", this.origANumber);
+        this.callSource.type = "unknown";
+      }
     }
 
     log.debug("Call from:", this.callSource);
