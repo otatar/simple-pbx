@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Trunk` ADD COLUMN `accountCode` VARCHAR(191) NOT NULL DEFAULT '';

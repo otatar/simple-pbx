@@ -82,6 +82,7 @@ export async function createTrunk(
       db.trunk.create({
         data: {
           name: trunk.name,
+          accountCode: trunk.accountCode,
           provider: trunk.provider,
           host: trunk.host,
           port: trunk.port,
@@ -95,6 +96,7 @@ export async function createTrunk(
       db.ps_aors.create({
         data: {
           id: trunk.name,
+          contact: "sip:" + trunk.host + ":" + trunk.port,
           qualify_frequency: trunk.qualifyFrequency,
           max_contacts: 1,
         },
@@ -122,6 +124,7 @@ export async function createTrunk(
               server_uri: trunk.serverUri,
               retry_interval: 60,
               outbound_auth: trunk.name,
+              contact_user: trunk.name,
               transport: trunk.transport,
             },
           })
@@ -131,9 +134,9 @@ export async function createTrunk(
       db.ps_endpoints.create({
         data: {
           id: trunk.name,
+          accountcode: trunk.accountCode,
           transport: trunk.transport,
           aors: trunk.name,
-          auth: trunk.name,
           context: "internal",
           disallow: "all",
           allow: [trunk.codec_1, trunk.codec_2, trunk.codec_3, trunk.codec_4].join(","),
@@ -174,6 +177,7 @@ export async function updateTrunk(
         where: { id: trunk.id },
         data: {
           name: trunk.name,
+          accountCode: trunk.accountCode,
           provider: trunk.provider,
           host: trunk.host,
           port: trunk.port,
@@ -188,13 +192,7 @@ export async function updateTrunk(
         where: { id: trunk.name },
         data: {
           qualify_frequency: trunk.qualifyFrequency,
-        },
-      }),
-      db.ps_auths.update({
-        where: { id: trunk.name },
-        data: {
-          password: trunk.password,
-          username: trunk.username,
+          contact: "sip:" + trunk.host + ":" + trunk.port,
         },
       }),
       db.ps_endpoint_id_ips.update({
@@ -212,6 +210,7 @@ export async function updateTrunk(
               server_uri: trunk.serverUri,
               retry_interval: 60,
               outbound_auth: trunk.name,
+              contact_user: trunk.name,
               transport: trunk.transport,
             },
           })
@@ -221,6 +220,7 @@ export async function updateTrunk(
       db.ps_endpoints.update({
         where: { id: trunk.name },
         data: {
+          accountcode: trunk.accountCode,
           transport: trunk.transport,
           disallow: "all",
           allow: [trunk.codec_1, trunk.codec_2, trunk.codec_3, trunk.codec_4].join(","),

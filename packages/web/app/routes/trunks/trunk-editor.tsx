@@ -56,6 +56,7 @@ const numberManipulationHeaders = [
 export const schema = z.object({
   id: z.number().optional(),
   name: z.string().min(1, "Name is required"),
+  accountCode: z.string().min(4, "Account code must be at least 4 characters long"),
   provider: z.string().optional(),
   host: z.string().min(1, "Host is required"),
   port: z.coerce.number({ required_error: "Port is required" }).min(0),
@@ -107,6 +108,7 @@ export default function TrunkEditor({ trunk, numberManipulations }: TrunkEditorP
     defaultValues: {
       id: trunk?.id ?? undefined,
       name: trunk?.name ?? "",
+      accountCode: trunk?.accountCode ?? "",
       provider: trunk?.provider ?? "",
       host: trunk?.host ?? "",
       port: trunk?.port ?? 5060,
@@ -170,6 +172,19 @@ export default function TrunkEditor({ trunk, numberManipulations }: TrunkEditorP
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                     <FormLabel>Name:</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="accountCode"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-2 justify-items-start gap-2">
+                    <FormLabel>Accountcode:</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>

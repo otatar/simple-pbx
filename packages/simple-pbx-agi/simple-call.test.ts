@@ -225,6 +225,7 @@ describe("outgoingCallRouting method testing", () => {
     db.trunk.findUnique.mockResolvedValue({
       id: 1,
       name: "test",
+      accountCode: "test",
       createdAt: new Date(),
       createdBy: "test",
       password: null,

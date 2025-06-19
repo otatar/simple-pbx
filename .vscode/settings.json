@@ -3,5 +3,6 @@
   "eslint.probe": ["typescript", "typescriptreact"],
   "editor.formatOnSave": true,
   // Runs Prettier, then ESLint
-  "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"]
+  "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
+  "cSpell.words": ["accountcode", "webrtc"]
 }
