@@ -83,7 +83,7 @@ export class SimpleCall {
           //Check class of dialing if call is form extension
           if (
             this.callSource.type === "extension" &&
-            route.cos.cos >= this.callSource.source.cos.cos
+            route.cos.cos < this.callSource.source.cos.cos
           ) {
             log.warn(
               `Extension cos: ${this.callSource.source.cos.cos} is lower than route cos: ${route.cos.cos}`
