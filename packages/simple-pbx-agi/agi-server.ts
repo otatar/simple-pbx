@@ -48,7 +48,9 @@ agi.on("call", async (call: AGIChannel) => {
     await simpleCall.numberManipulation();
 
     //Do the calling
-    log.debug(`The extension: ${simpleCall.manANumber} is calling: ${simpleCall.manBNumber}`);
+    log.debug(
+      `The extension: ${simpleCall.origANumber} (${simpleCall.manANumber}) is calling: ${simpleCall.manBNumber}`
+    );
     const dialString = await simpleCall.getDialString();
     await call.Set(`CALLERID(number)=${simpleCall.manANumber}`);
     await call.Dial(dialString);

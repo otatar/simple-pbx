@@ -137,6 +137,7 @@ export async function createTrunk(
           accountcode: trunk.accountCode,
           transport: trunk.transport,
           aors: trunk.name,
+          outbound_auth: trunk.name,
           context: "internal",
           disallow: "all",
           allow: [trunk.codec_1, trunk.codec_2, trunk.codec_3, trunk.codec_4].join(","),

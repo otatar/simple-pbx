@@ -318,13 +318,12 @@ export class SimpleCall {
     } else if (this.callDestination.type === "trunkGroup") {
       //TODO: implement trunk group dialing
     }
-    console.log(dialString);
     return dialString;
   }
 
   async insertCdr(duration: number, dialStatus: string) {
     log.debug("Saving CDR to database...");
-    console.info(
+    log.info(
       `Call from ${this.origANumber} to ${this.origBNumber}, duration: ${duration}, status: ${dialStatus}`
     );
     await db.cdr.create({
