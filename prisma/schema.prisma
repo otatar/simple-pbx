@@ -8,11 +8,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ExtensionTemplate {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  createdBy String?
+model WebUser {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
+  email           String    @unique
+  password        String
+  firstName       String    @default("")
+  lastName        String    @default("")
+  role            UserRole  @default(user)
+  active          Boolean   @default(true)
+  lastLoginAt     DateTime?
+  passwordChanged Boolean   @default(false)
+}
+
+enum UserRole {
+  user
+  admin
 }
 
 model Extension {

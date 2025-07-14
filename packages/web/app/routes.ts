@@ -1,9 +1,4 @@
-import {
-  type RouteConfig,
-  index,
-  layout,
-  route,
-} from "@react-router/dev/routes";
+import { type RouteConfig, index, layout, route } from "@react-router/dev/routes";
 
 export default [
   layout("./routes/layout/layout.tsx", [
@@ -20,39 +15,33 @@ export default [
       route(":id", "routes/trunks/trunk.tsx"),
     ]),
     route("number-manipulations", "routes/number-manipulations/index.tsx", [
-      layout(
-        "routes/layout/modal-route-layout.tsx",
-        { id: "number-manipulation" },
-        [
-          route("new", "routes/number-manipulations/num-manipulation-new.tsx"),
-          route(":id", "routes/number-manipulations/num-manipulation.tsx"),
-        ],
-      ),
+      layout("routes/layout/modal-route-layout.tsx", { id: "number-manipulation" }, [
+        route("new", "routes/number-manipulations/num-manipulation-new.tsx"),
+        route(":id", "routes/number-manipulations/num-manipulation.tsx"),
+      ]),
     ]),
     route("class-of-service", "routes/class-of-service/index.tsx", [
       route("new", "routes/class-of-service/new.tsx"),
       route(":id", "routes/class-of-service/cos.tsx"),
     ]),
     route("outbound-routing", "routes/outbound-routing/index.tsx", [
-      layout(
-        "routes/layout/modal-route-layout.tsx",
-        { id: "outbound-routing" },
-        [
-          route("new", "routes/outbound-routing/new.tsx"),
-          route(":id", "routes/outbound-routing/outbound-route.tsx"),
-        ],
-      ),
+      layout("routes/layout/modal-route-layout.tsx", { id: "outbound-routing" }, [
+        route("new", "routes/outbound-routing/new.tsx"),
+        route(":id", "routes/outbound-routing/outbound-route.tsx"),
+      ]),
     ]),
     route("inbound-routing", "routes/inbound-routing/index.tsx", [
-      layout(
-        "routes/layout/modal-route-layout.tsx",
-        { id: "inbound-routing" },
-        [
-          route("new", "routes/inbound-routing/new.tsx"),
-          route(":id", "routes/inbound-routing/inbound-route.tsx"),
-        ],
-      ),
+      layout("routes/layout/modal-route-layout.tsx", { id: "inbound-routing" }, [
+        route("new", "routes/inbound-routing/new.tsx"),
+        route(":id", "routes/inbound-routing/inbound-route.tsx"),
+      ]),
     ]),
     route("cdr", "routes/cdr/index.tsx"),
+    route("users", "routes/users/index.tsx", [
+      layout("routes/layout/modal-route-layout.tsx", { id: "users" }, [
+        route("new", "routes/users/user-new.tsx"),
+        route(":id", "routes/users/user.tsx"),
+      ]),
+    ]),
   ]),
 ] satisfies RouteConfig;

@@ -4,6 +4,17 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding database...");
 
+  await prisma.webUser.create({
+    data: {
+      email: "admin@gmail.com",
+      firstName: "Admin",
+      lastName: "Admin",
+      password: `$2a$12$kzABdFXviuYwAN00j8Ue3u2cYkg3oPXJQ1j4LU6w3Fy8fS65hfsza`,
+      role: "admin",
+      passwordChanged: true,
+    },
+  });
+
   await prisma.classOfService.create({
     data: {
       name: "Extensions",

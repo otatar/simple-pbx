@@ -1,27 +1,8 @@
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Route,
-  Command,
-  Frame,
-  Map,
-  PieChart,
-  Settings2,
-  Network,
-  Sparkles,
-  Signpost,
-  ScrollText,
-  Users,
-} from "lucide-react";
+import { Route, Settings2, Network, Sparkles, Signpost, ScrollText, Users } from "lucide-react";
 
 import { NavMain } from "~/components/nav-main";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarRail,
-} from "~/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "~/components/ui/sidebar";
 import BrandLogo from "./brand-logo";
 
 const data = {
@@ -75,7 +56,7 @@ const data = {
   navAdmin: [
     {
       title: "User Management",
-      url: "#",
+      url: "/users",
       icon: Users,
     },
     {
