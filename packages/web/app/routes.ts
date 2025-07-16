@@ -43,5 +43,6 @@ export default [
         route(":id", "routes/users/user.tsx"),
       ]),
     ]),
+    route("settings/general", "routes/settings/general.tsx"),
   ]),
 ] satisfies RouteConfig;

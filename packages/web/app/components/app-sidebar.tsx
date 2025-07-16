@@ -66,7 +66,7 @@ const data = {
       items: [
         {
           title: "General",
-          url: "#",
+          url: "/settings/general",
         },
       ],
     },
