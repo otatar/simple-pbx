@@ -6,13 +6,7 @@ import { Form, Link } from "react-router";
 import { RemixFormProvider, useRemixForm } from "remix-hook-form";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { useDelayedIsPending } from "~/utils/misc";
 
@@ -60,12 +54,7 @@ export default function ClassOfServiceEditor({
               <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                 <FormLabel>ID:</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    disabled
-                    className="bg-gray-100"
-                  />
+                  <Input type="number" {...field} disabled className="bg-gray-100" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,12 +88,10 @@ export default function ClassOfServiceEditor({
           />
           <div className="flex items-center justify-start space-x-2 w-full border-t pt-2 mt-4">
             <Button type="submit">
-              {isSubmitting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {cos ? "Update" : "Create"}
             </Button>
-            {isSubmitting ? (
+            {!cos ? (
               <Link to=".." relative="path">
                 <Button type="button" variant="outline">
                   Cancel

@@ -1,13 +1,7 @@
-"use client";
-
 import { ChevronRight, Orbit, type LucideIcon } from "lucide-react";
 import { NavLink } from "react-router";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "~/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -65,11 +59,7 @@ export function NavMain({
           {pbxItems.map((item) => (
             <div key={item.title}>
               {item.items ? (
-                <Collapsible
-                  asChild
-                  defaultOpen={item.isActive}
-                  className="group/collapsible"
-                >
+                <Collapsible asChild defaultOpen={item.isActive} className="group/collapsible">
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton tooltip={item.title}>
@@ -86,9 +76,7 @@ export function NavMain({
                             key={subItem.title}
                             to={subItem.url}
                             className={({ isActive }) =>
-                              isActive
-                                ? "bg-sidebar-accent rounded-md font-semibold"
-                                : ""
+                              isActive ? "bg-sidebar-accent rounded-md font-semibold" : ""
                             }
                           >
                             <SidebarMenuSubItem key={subItem.title}>
@@ -107,9 +95,7 @@ export function NavMain({
                   <NavLink
                     to={item.url}
                     className={({ isActive }) =>
-                      isActive
-                        ? "bg-sidebar-accent rounded-md font-semibold"
-                        : ""
+                      isActive ? "bg-sidebar-accent rounded-md font-semibold" : ""
                     }
                   >
                     <SidebarMenuSubItem>
@@ -132,11 +118,7 @@ export function NavMain({
           {adminItems.map((item) => (
             <div key={item.title}>
               {item.items ? (
-                <Collapsible
-                  asChild
-                  defaultOpen={item.isActive}
-                  className="group/collapsible"
-                >
+                <Collapsible asChild defaultOpen={item.isActive} className="group/collapsible">
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton tooltip={item.title}>
@@ -153,9 +135,7 @@ export function NavMain({
                             key={subItem.title}
                             to={subItem.url}
                             className={({ isActive }) =>
-                              isActive
-                                ? "bg-sidebar-accent rounded-md font-semibold"
-                                : ""
+                              isActive ? "bg-sidebar-accent rounded-md font-semibold" : ""
                             }
                           >
                             <SidebarMenuSubItem key={subItem.title}>
@@ -174,9 +154,7 @@ export function NavMain({
                   <NavLink
                     to={item.url}
                     className={({ isActive }) =>
-                      isActive
-                        ? "bg-sidebar-accent rounded-md font-semibold"
-                        : ""
+                      isActive ? "bg-sidebar-accent rounded-md font-semibold" : ""
                     }
                   >
                     <SidebarMenuSubItem>

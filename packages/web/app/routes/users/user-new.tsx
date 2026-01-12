@@ -1,10 +1,11 @@
 import { badRequest } from "~/utils/request.server";
 import { redirectWithToast } from "~/utils/toast.server";
-import { createUser, getUserByUsername } from "~/models/ users.server";
+import { getUserByUsername } from "~/models/ users.server";
 import CustomErrorBoundary from "~/components/custom-error-boundary";
 import UserEditor, { resolver, type FormData } from "./user-editor";
 import { getValidatedFormData } from "remix-hook-form";
 import type { Route } from "./+types";
+import { auth } from "~/utils/auth.server";
 
 export const action = async ({ request }: Route.ActionArgs) => {
   //await validateCSRF(request);
@@ -27,7 +28,11 @@ export const action = async ({ request }: Route.ActionArgs) => {
     });
   }
   try {
-    await createUser(receivedData);
+    //await createUser(receivedData);
+    await auth.api.createUser({
+      body: receivedData,
+      headers: request.headers,
+    });
     return redirectWithToast("/users", {
       type: "success",
       title: "Success",

@@ -1,6 +1,10 @@
 import { type RouteConfig, index, layout, route } from "@react-router/dev/routes";
 
 export default [
+  route("/api/auth/*", "routes/api/auth.tsx"),
+  route("login", "routes/auth/login.tsx"),
+  route("logout", "routes/auth/logout.tsx"),
+  route("account", "routes/auth/account.tsx"),
   layout("./routes/layout/layout.tsx", [
     index("routes/dashboard.tsx"),
     route("extensions", "routes/extensions/extensions.tsx", [
@@ -36,7 +40,11 @@ export default [
         route(":id", "routes/inbound-routing/inbound-route.tsx"),
       ]),
     ]),
-    route("cdr", "routes/cdr/index.tsx"),
+    route("cdr", "routes/cdr/index.tsx", [
+      layout("routes/layout/modal-route-layout.tsx", { id: "cdr" }, [
+        route(":id", "routes/cdr/details.tsx"),
+      ]),
+    ]),
     route("users", "routes/users/index.tsx", [
       layout("routes/layout/modal-route-layout.tsx", { id: "users" }, [
         route("new", "routes/users/user-new.tsx"),

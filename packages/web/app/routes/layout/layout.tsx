@@ -2,6 +2,7 @@ import {
   data,
   isRouteErrorResponse,
   Outlet,
+  redirect,
   useLocation,
   type HeadersArgs,
 } from "react-router";
@@ -16,23 +17,13 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 import { Separator } from "~/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "~/components/ui/sidebar";
-import { combineHeaders, getToast } from "~/utils/toast.server";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
+import { combineHeaders, getToast, redirectWithToast } from "~/utils/toast.server";
 import type { Route } from "./+types/layout";
 import { Toaster } from "~/components/toaster";
 import { db } from "~/utils/db.server";
-
-const accountData = {
-  user: {
-    name: "Omer Tatar",
-    email: "omer.tatar@live.com",
-    avatar: "https://github.com/shadcn.png",
-  },
-};
+import { auth } from "~/utils/auth.server";
+import { authClient } from "~/utils/auth.client";
 
 const SUB_BRAND = "Let it simply ring! ";
 
@@ -41,9 +32,16 @@ export function headers({ actionHeaders, loaderHeaders }: HeadersArgs) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const subBrand = (
-    await db.globalSettings.findFirst({ select: { subBranding: true } })
-  )?.subBranding;
+  const session = await auth.api.getSession({ headers: request.headers });
+  if (!session) {
+    return redirectWithToast("/login", {
+      title: "Unauthenticated",
+      description: "You must be logged in to access this page.",
+      type: "warning",
+    });
+  }
+  const subBrand = (await db.globalSettings.findFirst({ select: { subBranding: true } }))
+    ?.subBranding;
   //Get toast from session
   const { toast, headers: toastHeaders } = await getToast(request);
   return data({ toast, subBrand }, { headers: combineHeaders(toastHeaders) });
@@ -54,6 +52,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
   const { subBrand } = loaderData;
   const location = useLocation();
   const locationItems = location.pathname.split("/").slice(1);
+  const { data: session } = authClient.useSession();
 
   return (
     <div className="max-w-[90rem] mx-auto">
@@ -77,22 +76,18 @@ export default function Page({ loaderData }: Route.ComponentProps) {
                         </BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink
-                          href={
-                            "/" + locationItems.slice(0, index + 1).join("/")
-                          }
+                          href={"/" + locationItems.slice(0, index + 1).join("/")}
                           key={item}
                         >
                           {item.charAt(0).toUpperCase() + item.slice(1)}
                         </BreadcrumbLink>
                       )}
-                      {index < locationItems.length - 1 ? (
-                        <BreadcrumbSeparator />
-                      ) : null}
+                      {index < locationItems.length - 1 ? <BreadcrumbSeparator /> : null}
                     </BreadcrumbItem>
                   ))}
                 </BreadcrumbList>
               </Breadcrumb>
-              <NavUser user={accountData.user} />
+              <NavUser user={session?.user} />
             </div>
           </header>
           <Separator orientation="horizontal" />

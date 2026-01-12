@@ -6,7 +6,6 @@
   "scripts": {
     "dev:agi": "tsx packages/simple-pbx-agi/agi-server.ts",
     "dev:web": "npm run dev --workspace packages/web",
-    "dev:web1": "npm run dev --workspace packages/web1",
     "start:web": "npm run start --workspace packages/simple-pbx-web",
     "typecheck:web": "npm run typecheck --workspace packages/simple-pbx-web",
     "build:web": "npm run build --workspace packages/simple-pbx-web",

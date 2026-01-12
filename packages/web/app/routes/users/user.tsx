@@ -1,6 +1,5 @@
 import { invariantResponse } from "@epic-web/invariant";
 import { getValidatedFormData } from "remix-hook-form";
-import { changePassword, deleteUser, getUser, updateUser } from "~/models/ users.server";
 import { redirectWithToast } from "~/utils/toast.server";
 import UserEditor, { resolver, type FormData } from "./user-editor";
 import { badRequest } from "~/utils/request.server";
@@ -8,11 +7,14 @@ import CustomErrorBoundary from "~/components/custom-error-boundary";
 import type { Route } from "./+types/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import PasswordEditor, { resolverPassword, type FormDataPassword } from "./password-editor";
+import { auth } from "~/utils/auth.server";
+import { db } from "~/utils/db.server";
 
 export async function action({ request, params }: Route.LoaderArgs) {
   if (request.method == "DELETE") {
     invariantResponse(params.id, "ID is required");
-    await deleteUser(params.id);
+    //await deleteUser(params.id);
+    await auth.api.removeUser({ body: { userId: params.id }, headers: request.headers });
     return redirectWithToast("/users", {
       type: "success",
       title: "Success",
@@ -27,7 +29,15 @@ export async function action({ request, params }: Route.LoaderArgs) {
     if (errors) {
       return badRequest({ errors, defaultValues });
     }
-    await updateUser(receivedData);
+    await db.user.update({
+      where: { id: params.id },
+      data: {
+        email: receivedData.email,
+        name: receivedData.name,
+        role: receivedData.role,
+        banned: receivedData.banned,
+      },
+    });
     return redirectWithToast("/users", {
       type: "success",
       title: "Success",
@@ -44,7 +54,10 @@ export async function action({ request, params }: Route.LoaderArgs) {
     if (errors) {
       return badRequest({ errors, defaultValues });
     }
-    await changePassword(Number(params.id), receivedData.password, true);
+    await auth.api.setUserPassword({
+      body: { userId: params.id, newPassword: receivedData.password },
+      headers: request.headers,
+    });
     return redirectWithToast("/users", {
       type: "success",
       title: "Success",
@@ -55,8 +68,7 @@ export async function action({ request, params }: Route.LoaderArgs) {
 
 export async function loader({ params }: Route.LoaderArgs) {
   invariantResponse(params.id, "ID is required");
-  const id = parseInt(params.id);
-  const user = await getUser(id);
+  const user = await db.user.findUnique({ where: { id: params.id } });
   invariantResponse(user, "User not found", { status: 404 });
   return user;
 }
