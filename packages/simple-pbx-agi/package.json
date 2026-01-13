@@ -6,10 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "tslog": "^4.9.3"
+    "tslog": "^4.10.2"
   },
   "devDependencies": {
-    "@types/node": "^20.17.24"
+    "@types/node": "^25.0.7"
   },
   "author": "Omer Tatar",
   "license": "ISC",

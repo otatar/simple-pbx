@@ -1,11 +1,4 @@
-import {
-  data,
-  isRouteErrorResponse,
-  Outlet,
-  redirect,
-  useLocation,
-  type HeadersArgs,
-} from "react-router";
+import { data, isRouteErrorResponse, Outlet, useLocation, type HeadersArgs } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
 import { NavUser } from "~/components/nav-user";
 import {
@@ -18,12 +11,12 @@ import {
 } from "~/components/ui/breadcrumb";
 import { Separator } from "~/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
-import { combineHeaders, getToast, redirectWithToast } from "~/utils/toast.server";
+import { combineHeaders, getToast } from "~/utils/toast.server";
 import type { Route } from "./+types/layout";
 import { Toaster } from "~/components/toaster";
 import { db } from "~/utils/db.server";
-import { auth } from "~/utils/auth.server";
 import { authClient } from "~/utils/auth.client";
+import { authMiddleware } from "middleware/auth";
 
 const SUB_BRAND = "Let it simply ring! ";
 
@@ -31,15 +24,9 @@ export function headers({ actionHeaders, loaderHeaders }: HeadersArgs) {
   return actionHeaders ? actionHeaders : loaderHeaders;
 }
 
+export const middleware: Route.MiddlewareFunction[] = [authMiddleware];
+
 export async function loader({ request }: Route.LoaderArgs) {
-  const session = await auth.api.getSession({ headers: request.headers });
-  if (!session) {
-    return redirectWithToast("/login", {
-      title: "Unauthenticated",
-      description: "You must be logged in to access this page.",
-      type: "warning",
-    });
-  }
   const subBrand = (await db.globalSettings.findFirst({ select: { subBranding: true } }))
     ?.subBranding;
   //Get toast from session
@@ -55,14 +42,14 @@ export default function Page({ loaderData }: Route.ComponentProps) {
   const { data: session } = authClient.useSession();
 
   return (
-    <div className="max-w-[90rem] mx-auto">
+    <div className="max-w-360 mx-auto">
       <SidebarProvider>
         <AppSidebar
           className="relative"
           subbrand={subBrand && subBrand.length > 0 ? subBrand : SUB_BRAND}
         />
         <SidebarInset>
-          <header className="flex w-full h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <header className="flex w-full h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
             <div className="flex w-full items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
