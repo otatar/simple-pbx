@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircleIcon, Eye, EyeOff, GalleryVerticalEnd, Loader2, Phone } from "lucide-react";
+import { AlertCircleIcon, Loader2, Phone } from "lucide-react";
 import { useState } from "react";
 import { data, Form } from "react-router";
 import { getValidatedFormData, RemixFormProvider, useRemixForm } from "remix-hook-form";

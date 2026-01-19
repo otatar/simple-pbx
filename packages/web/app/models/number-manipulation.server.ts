@@ -1,5 +1,5 @@
-import type { NumberManipulation, Prisma } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import type { NumberManipulation, Prisma } from "~/prisma/client";
+import db from "~/utils/db.server";
 
 export async function checkNumberManipulation(trunkId: number, name: string) {
   const outboundNumberManipulation = await db.numberManipulation.findFirst({
@@ -11,10 +11,7 @@ export async function checkNumberManipulation(trunkId: number, name: string) {
   return outboundNumberManipulation;
 }
 
-export async function checkNumberManipulationPriority(
-  trunkId: number,
-  priority: number,
-) {
+export async function checkNumberManipulationPriority(trunkId: number, priority: number) {
   const outboundNumberManipulation = await db.numberManipulation.findFirst({
     where: {
       trunkId,
@@ -55,7 +52,7 @@ export async function getNumberManipulations() {
 
 export async function getNumberManipulationForTrunk(
   trunkId: number,
-  direction: "outbound" | "inbound",
+  direction: "outbound" | "inbound"
 ) {
   const numberManipulation = await db.numberManipulation.findMany({
     where: {
@@ -70,7 +67,7 @@ export async function getNumberManipulationForTrunk(
 }
 
 export async function createNumberManipulation(
-  numMan: Prisma.NumberManipulationUncheckedCreateInput,
+  numMan: Prisma.NumberManipulationUncheckedCreateInput
 ) {
   const numberManipulation = await db.numberManipulation.create({
     data: numMan,
@@ -78,9 +75,7 @@ export async function createNumberManipulation(
   return numberManipulation;
 }
 
-export async function updateNumberManipulation(
-  numMan: Partial<NumberManipulation>,
-) {
+export async function updateNumberManipulation(numMan: Partial<NumberManipulation>) {
   const numberManipulation = await db.numberManipulation.update({
     where: {
       id: numMan.id,

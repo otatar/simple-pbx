@@ -8,7 +8,7 @@ import type { Route } from "./+types/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import PasswordEditor, { resolverPassword, type FormDataPassword } from "./password-editor";
 import { auth } from "~/utils/auth.server";
-import { db } from "~/utils/db.server";
+import db from "~/utils/db.server";
 
 export async function action({ request, params }: Route.LoaderArgs) {
   if (request.method == "DELETE") {

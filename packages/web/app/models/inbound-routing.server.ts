@@ -1,5 +1,5 @@
-import type { IncomingRoute, Prisma } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import type { IncomingRoute, Prisma } from "~/prisma/client";
+import db from "~/utils/db.server";
 
 export async function getInboundRoutes() {
   const routes = await db.incomingRoute.findMany({

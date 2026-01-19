@@ -1,5 +1,5 @@
-import type { OutgoingRoute, Prisma } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import type { OutgoingRoute, Prisma } from "~/prisma/client";
+import db from "~/utils/db.server";
 
 export async function getOutboundRoutes() {
   const routes = await db.outgoingRoute.findMany({
@@ -50,9 +50,7 @@ export async function getOutboundRoute(id: number) {
   });
 }
 
-export async function createOutboundRoute(
-  route: Prisma.OutgoingRouteUncheckedCreateInput,
-) {
+export async function createOutboundRoute(route: Prisma.OutgoingRouteUncheckedCreateInput) {
   return await db.outgoingRoute.create({
     data: {
       name: route.name,
@@ -60,9 +58,7 @@ export async function createOutboundRoute(
       destinationType: route.destinationType,
       cos: { connect: { id: route.cosId } },
       trunk: route.trunkId ? { connect: { id: route.trunkId } } : undefined,
-      trunkGroup: route.trunkGroupId
-        ? { connect: { id: route.trunkGroupId } }
-        : undefined,
+      trunkGroup: route.trunkGroupId ? { connect: { id: route.trunkGroupId } } : undefined,
     },
   });
 }

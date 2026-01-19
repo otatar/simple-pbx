@@ -1,5 +1,5 @@
-import type { Prisma } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import type { Prisma } from "~/prisma/client";
+import db from "~/utils/db.server";
 import bcrypt from "bcryptjs";
 
 export default function getUsers() {

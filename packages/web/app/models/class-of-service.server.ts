@@ -1,5 +1,5 @@
-import type { Prisma } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import type { Prisma } from "~/prisma/client";
+import db from "~/utils/db.server";
 
 export async function getCos() {
   return await db.classOfService.findMany();
@@ -17,17 +17,13 @@ export async function checkCos(cos: number) {
   });
 }
 
-export async function createCos(
-  cos: Omit<Prisma.ClassOfServiceUncheckedCreateInput, "id">,
-) {
+export async function createCos(cos: Omit<Prisma.ClassOfServiceUncheckedCreateInput, "id">) {
   return await db.classOfService.create({
     data: cos,
   });
 }
 
-export async function updateCos(
-  cos: Prisma.ClassOfServiceUncheckedUpdateInput,
-) {
+export async function updateCos(cos: Prisma.ClassOfServiceUncheckedUpdateInput) {
   return await db.classOfService.update({
     where: { id: Number(cos.id) },
     data: cos,

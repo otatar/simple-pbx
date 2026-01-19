@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import type { NumberManipulation, ps_endpoints, Trunk } from "@prisma/client";
+import type { NumberManipulation, ps_endpoints, Trunk } from "~/prisma/client";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Separator } from "~/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";

@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "VITE_CJS_IGNORE_WARNING=true react-router build",
-    "dev": "VITE_CJS_IGNORE_WARNING=true react-router dev",
-    "start": "VITE_CJS_IGNORE_WARNING=true react-router-serve ./build/server/index.js",
-    "typecheck": "VITE_CJS_IGNORE_WARNING=true react-router typegen && tsc"
+    "build": "react-router build",
+    "dev": "react-router dev",
+    "start": "dotenv -e .env.production react-router-serve ./build/server/index.js",
+    "prod": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
     "@epic-web/invariant": "^1.0.0",
@@ -40,6 +41,7 @@
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.71.0",
     "react-router": "^7.12.0",
+    "react-router-dom": "^7.12.0",
     "remix-hook-form": "^7.1.1",
     "sonner": "^2.0.7",
     "spin-delay": "^2.0.1",
@@ -53,6 +55,7 @@
     "@types/node": "^25",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
+    "dotenv-cli": "^11.0.0",
     "globals": "^17.0.0",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",

@@ -7,7 +7,7 @@ import PasswordChangeEditor, {
 } from "./password-change-editor";
 import type { Route } from "./+types/account";
 import { auth } from "~/utils/auth.server";
-import { db } from "~/utils/db.server";
+import db from "~/utils/db.server";
 import { invariantResponse } from "@epic-web/invariant";
 import { getValidatedFormData } from "remix-hook-form";
 import { badRequest } from "~/utils/request.server";

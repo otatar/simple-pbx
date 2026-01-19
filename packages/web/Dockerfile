@@ -1,22 +1,31 @@
-FROM node:20-alpine AS development-dependencies-env
-COPY . /app
-WORKDIR /app
+# syntax=docker/dockerfile:1
+FROM node:20-alpine
+
+RUN npm config set strict-ssl false
+
+WORKDIR /simple-pbx
+
+# 1. Copy ONLY manifests first (cache-friendly)
+COPY package.json package-lock.json ./
+COPY /packages/web/package.json packages/web/
+
+# 2. Install all deps in the monorepo (creates workspace symlinks)
 RUN npm ci
 
-FROM node:20-alpine AS production-dependencies-env
-COPY ./package.json package-lock.json /app/
-WORKDIR /app
-RUN npm ci --omit=dev
+# 3. Copy prisma schema BEFORE generation
+COPY prisma/ ./prisma
 
-FROM node:20-alpine AS build-env
-COPY . /app/
-COPY --from=development-dependencies-env /app/node_modules /app/node_modules
-WORKDIR /app
-RUN npm run build
+# 4. Generate Prisma Client at root
+RUN npx prisma generate
 
-FROM node:20-alpine
-COPY ./package.json package-lock.json /app/
-COPY --from=production-dependencies-env /app/node_modules /app/node_modules
-COPY --from=build-env /app/build /app/build
-WORKDIR /app
-CMD ["npm", "run", "start"]
+# 5. Copy the full source tree
+COPY . .
+
+# 6. Build the web workspace (React Router build)
+RUN npm run build --workspace packages/web
+
+# 7. Prune dev deps for smaller runtime image (optional)
+RUN npm prune --omit=dev
+
+# 8. Start the web workspace server
+CMD ["npm", "run", "prod", "--workspace", "packages/web"]

@@ -1,5 +1,5 @@
-import type { Prisma, Trunk } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import type { Prisma, Trunk } from "~/prisma/client";
+import db from "~/utils/db.server";
 
 export function getTrunks() {
   return db.trunk.findMany({});

@@ -6,13 +6,14 @@
   "scripts": {
     "dev:agi": "tsx packages/simple-pbx-agi/agi-server.ts",
     "dev:web": "npm run dev --workspace packages/web",
-    "start:web": "npm run start --workspace packages/simple-pbx-web",
-    "typecheck:web": "npm run typecheck --workspace packages/simple-pbx-web",
-    "build:web": "npm run build --workspace packages/simple-pbx-web",
+    "start:web": "npm run start --workspace packages/web",
+    "typecheck:web": "npm run typecheck --workspace packages/web",
+    "build:web": "npm run build --workspace packages/web",
     "db:migrate": "cd prisma && prisma migrate dev",
+    "db:migrate:deploy": "cd prisma && prisma migrate deploy",
     "db:studio": "cd prisma && prisma studio",
     "db:seed": "tsx prisma/seed.ts",
-    "test:web": "npm run test --workspace packages/simple-pbx-web",
+    "test:web": "npm run test --workspace packages/web",
     "test:agi": "npm run test --workspace packages/simple-pbx-agi"
   },
   "author": "Omer Tatar",
@@ -22,6 +23,7 @@
     "packages/web"
   ],
   "dependencies": {
+    "@prisma/adapter-mariadb": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "tsx": "^4.21.0"
   },

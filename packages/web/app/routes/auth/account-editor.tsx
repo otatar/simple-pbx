@@ -15,7 +15,7 @@ import { RemixFormProvider, useRemixForm } from "remix-hook-form";
 import { useDelayedIsPending } from "~/utils/misc";
 import { Loader2, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import type { User } from "@prisma/client";
+import type { User } from "~/prisma/client";
 
 const roles = ["user", "admin"] as const;
 

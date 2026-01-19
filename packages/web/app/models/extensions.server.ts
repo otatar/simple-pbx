@@ -1,5 +1,5 @@
-import { Prisma, type Extension } from "@prisma/client";
-import { db } from "~/utils/db.server";
+import { Prisma, type Extension } from "~/prisma/client";
+import db from "~/utils/db.server";
 
 export function getExtensions() {
   /*return db.$queryRaw<
@@ -60,7 +60,7 @@ export async function createExtension(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    },
+    }
 ) {
   // We will use a transaction because we need to create more records in the database
   try {
@@ -100,12 +100,9 @@ export async function createExtension(
           auth: extension.extension,
           context: "internal",
           disallow: "all",
-          allow: [
-            extension.codec_1,
-            extension.codec_2,
-            extension.codec_3,
-            extension.codec_4,
-          ].join(","),
+          allow: [extension.codec_1, extension.codec_2, extension.codec_3, extension.codec_4].join(
+            ","
+          ),
           dtmf_mode: extension.dtmf_mode,
           direct_media: extension.direct_media,
           ice_support: extension.ice_support,
@@ -131,7 +128,7 @@ export async function updateExtension(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    },
+    }
 ) {
   await db.extension.update({
     where: { id: extension.id },
@@ -157,12 +154,7 @@ export async function updateExtension(
       auth: extension.extension,
       context: "internal",
       disallow: "all",
-      allow: [
-        extension.codec_1,
-        extension.codec_2,
-        extension.codec_3,
-        extension.codec_4,
-      ].join(","),
+      allow: [extension.codec_1, extension.codec_2, extension.codec_3, extension.codec_4].join(","),
       dtmf_mode: extension.dtmf_mode,
       direct_media: extension.direct_media,
       ice_support: extension.ice_support,

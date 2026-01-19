@@ -14,9 +14,10 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/s
 import { combineHeaders, getToast } from "~/utils/toast.server";
 import type { Route } from "./+types/layout";
 import { Toaster } from "~/components/toaster";
-import { db } from "~/utils/db.server";
+import db from "~/utils/db.server";
 import { authClient } from "~/utils/auth.client";
 import { authMiddleware } from "middleware/auth";
+import { auth } from "~/utils/auth.server";
 
 const SUB_BRAND = "Let it simply ring! ";
 
@@ -31,15 +32,16 @@ export async function loader({ request }: Route.LoaderArgs) {
     ?.subBranding;
   //Get toast from session
   const { toast, headers: toastHeaders } = await getToast(request);
-  return data({ toast, subBrand }, { headers: combineHeaders(toastHeaders) });
+  const session = await auth.api.getSession({ headers: request.headers });
+  return data({ toast, subBrand, user: session?.user }, { headers: combineHeaders(toastHeaders) });
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
   const { toast } = loaderData;
   const { subBrand } = loaderData;
+  const { user } = loaderData;
   const location = useLocation();
   const locationItems = location.pathname.split("/").slice(1);
-  const { data: session } = authClient.useSession();
 
   return (
     <div className="max-w-360 mx-auto">
@@ -74,7 +76,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
                   ))}
                 </BreadcrumbList>
               </Breadcrumb>
-              <NavUser user={session?.user} />
+              <NavUser user={user} />
             </div>
           </header>
           <Separator orientation="horizontal" />

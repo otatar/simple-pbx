@@ -1,11 +1,5 @@
 import type { Route } from "./+types/trunks";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { DataTable, generateColumnHeaders } from "~/components/data-table";
 import { BookOpen, Trash2 } from "lucide-react";
 import { useNavigate, useSubmit } from "react-router";

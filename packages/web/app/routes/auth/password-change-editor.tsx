@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { User } from "@prisma/client";
+import type { User } from "~/prisma/client";
 import { AlertCircleIcon, Loader2, Terminal } from "lucide-react";
 import { useState } from "react";
 import { Form, Link } from "react-router";
