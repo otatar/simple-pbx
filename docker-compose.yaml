@@ -3,8 +3,10 @@ services:
     build:
       context: .
       dockerfile: packages/web/Dockerfile
-    ports:
-      - "3000:3000"
+    #ports:
+    #- "3000:3000"
+    expose:
+      - "3000"
     environment:
       NODE_ENV: production
       DATABASE_URL: ${DATABASE_URL}
@@ -22,7 +24,10 @@ services:
 
   database:
     image: mariadb:latest
-    restart: always
+    command: --skip-name-resolve
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
@@ -31,3 +36,67 @@ services:
       TZ: Europe/Sarajevo
     volumes:
       - ./volumes/mariadb/init:/docker-entrypoint-initdb.d
+
+  asterisk:
+    build:
+      context: ./asterisk
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    network_mode: "host"
+    depends_on:
+      - database
+    environment:
+      ASTERISK_UID: ${ASTERISK_UID}
+      ASTERISK_GID: ${ASTERISK_GID}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      RTP_START: ${RTP_START}
+      RTP_END: ${RTP_END}
+    volumes:
+      - ./volumes/asterisk/templates:/asterisk/templates
+      - ./volumes/asterisk/config:/etc/asterisk
+      - asterisk-log-volume:/var/log/asterisk
+
+  agi:
+    build:
+      context: .
+      dockerfile: packages/simple-pbx-agi/Dockerfile
+    ports:
+      - "4573:4573"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT:-3306}
+    depends_on:
+      - database
+
+  #  portainer:
+  #    image: portainer/portainer-ce:latest
+  #    container_name: portainer
+  #    restart: always
+  #    ports:
+  #      - "9000:9000"
+  #      - "9443:9443"
+  #    volumes:
+  #      - /var/run/docker.sock:/var/run/docker.sock
+  #      - portainer_data:/data
+
+  nginx-proxy:
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: always
+    ports:
+      - "80:80" # Public HTTP
+      - "443:443" # Public HTTPS
+      - "81:81" # Admin UI (Dashboard)
+    volumes:
+      - ./nginx/data:/data
+      - ./nginx/letsencrypt:/etc/letsencrypt
+
+volumes:
+  asterisk-log-volume:
+#  portainer_data:

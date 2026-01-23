@@ -1,0 +1,8 @@
+[asterisk]
+Description = MySQL Asterisk
+Driver = MariaDB Unicode
+Database = asterisk
+Server = 127.0.0.1
+User = ${DATABASE_USER}
+Password = ${DATABASE_PASSWORD}
+Port = 3306

@@ -136,7 +136,7 @@ CREATE TABLE `GlobalSettings` (
 
 LOCK TABLES `GlobalSettings` WRITE;
 /*!40000 ALTER TABLE `GlobalSettings` DISABLE KEYS */;
-INSERT INTO `GlobalSettings` VALUES (1,40,18000,'2025-04-25 09:50:26.684','system','JP Elektroprivreda d.d. Sarajevo');
+INSERT INTO `GlobalSettings` VALUES (1,40,18000,'2025-04-25 09:50:26.684','system','Simple PBX');
 /*!40000 ALTER TABLE `GlobalSettings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -840,7 +840,6 @@ CREATE TABLE `ps_registrations` (
 
 LOCK TABLES `ps_registrations` WRITE;
 /*!40000 ALTER TABLE `ps_registrations` DISABLE KEYS */;
-INSERT INTO `ps_registrations` VALUES ('38736753090','transport-udp','38736753090',NULL,'sip:38736753090@82.118.0.3','sip:38736753090@82.118.0.3',60,NULL,NULL,NULL,NULL),('Missnet','transport-udp','Missnet',NULL,'','',60,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `ps_registrations` ENABLE KEYS */;
 UNLOCK TABLES;
 

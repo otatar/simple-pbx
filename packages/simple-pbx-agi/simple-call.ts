@@ -1,4 +1,4 @@
-import type { ClassOfService, Extension, Trunk, TrunkGroup } from "@prisma/client";
+import type { ClassOfService, Extension, Trunk, TrunkGroup } from "~/prisma/client";
 import { Logger } from "tslog";
 import { db } from "./libs/db";
 
@@ -74,7 +74,7 @@ export class SimpleCall {
       });
       for (const route of routes) {
         log.trace(
-          `Trying to get match for called number: ${this.origBNumber} and route prefix: ${route.prefix}`
+          `Trying to get match for called number: ${this.origBNumber} and route prefix: ${route.prefix}`,
         );
         const routeMatch = this.isRouteMatch(this.origBNumber, route.prefix);
         if (routeMatch) {
@@ -86,7 +86,7 @@ export class SimpleCall {
             route.cos.cos < this.callSource.source.cos.cos
           ) {
             log.warn(
-              `Extension cos: ${this.callSource.source.cos.cos} is lower than route cos: ${route.cos.cos}`
+              `Extension cos: ${this.callSource.source.cos.cos} is lower than route cos: ${route.cos.cos}`,
             );
             this.callDestination.type = "forbidden";
             continue;
@@ -123,7 +123,7 @@ export class SimpleCall {
       if (this.callDestination.type === undefined) {
         log.debug(
           "There is no route in the database to destination phone number: ",
-          this.origBNumber
+          this.origBNumber,
         );
         this.callDestination = {
           type: "unknown",
@@ -159,7 +159,7 @@ export class SimpleCall {
 
     for (const route of routes) {
       log.trace(
-        `Trying to get match for called number: ${this.manBNumber} and route prefix: ${route.prefix}`
+        `Trying to get match for called number: ${this.manBNumber} and route prefix: ${route.prefix}`,
       );
       const routeMatch = this.isRouteMatch(this.manBNumber!, route.prefix);
       if (routeMatch) {
@@ -232,7 +232,7 @@ export class SimpleCall {
     for (const manipulation of numberManipulation) {
       log.trace(
         `A number: ${this.manANumber}, B number: ${this.manBNumber}, manipulation:`,
-        manipulation
+        manipulation,
       );
       //Handle A number manipulation
       if (manipulation.type === "aNumber") {
@@ -244,7 +244,7 @@ export class SimpleCall {
           if (manipulation.stripEnd != 0) {
             this.manANumber = this.manANumber.slice(
               manipulation.stripBegin,
-              -manipulation.stripEnd
+              -manipulation.stripEnd,
             );
           } else {
             this.manANumber = this.manANumber.slice(manipulation.stripBegin);
@@ -300,7 +300,7 @@ export class SimpleCall {
       }
     }
     log.debug(
-      `Number manipulation finished, A number: ${this.manANumber}, B number: ${this.manBNumber}`
+      `Number manipulation finished, A number: ${this.manANumber}, B number: ${this.manBNumber}`,
     );
   }
 
@@ -324,7 +324,7 @@ export class SimpleCall {
   async insertCdr(duration: number, dialStatus: string) {
     log.debug("Saving CDR to database...");
     log.info(
-      `Call from ${this.origANumber} to ${this.origBNumber}, duration: ${duration}, status: ${dialStatus}`
+      `Call from ${this.origANumber} to ${this.origBNumber}, duration: ${duration}, status: ${dialStatus}`,
     );
     await db.cdr.create({
       data: {

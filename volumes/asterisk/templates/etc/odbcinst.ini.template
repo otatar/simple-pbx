@@ -1,0 +1,5 @@
+[MariaDB Unicode]
+Driver = /usr/lib/x86_64-linux-gnu/odbc/libmaodbc.so
+Description=MariaDB Connector/ODBC(Unicode)
+Threading=0
+UsageCount=1

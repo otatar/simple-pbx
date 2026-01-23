@@ -1,31 +1,53 @@
-# syntax=docker/dockerfile:1
-FROM node:20-alpine
-
+# --- STAGE 1: Build ---
+FROM node:20-alpine AS builder
+RUN apk add --no-cache openssl
 RUN npm config set strict-ssl false
 
 WORKDIR /simple-pbx
 
-# 1. Copy ONLY manifests first (cache-friendly)
+# 1. Install dependencies
 COPY package.json package-lock.json ./
-COPY /packages/web/package.json packages/web/
-
-# 2. Install all deps in the monorepo (creates workspace symlinks)
+COPY packages/web/package.json packages/web/
 RUN npm ci
 
-# 3. Copy prisma schema BEFORE generation
-COPY prisma/ ./prisma
-
-# 4. Generate Prisma Client at root
+# 2. Generate Prisma
+COPY prisma/ ./prisma/
 RUN npx prisma generate
 
-# 5. Copy the full source tree
+# 3. Build the App
 COPY . .
-
-# 6. Build the web workspace (React Router build)
 RUN npm run build --workspace packages/web
 
-# 7. Prune dev deps for smaller runtime image (optional)
+# 4. Prune for production (removes devDeps like Vite/TypeScript)
 RUN npm prune --omit=dev
 
-# 8. Start the web workspace server
-CMD ["npm", "run", "prod", "--workspace", "packages/web"]
+# --- STAGE 2: Runner ---
+FROM node:20-alpine AS runner
+RUN apk add --no-cache openssl
+WORKDIR /simple-pbx
+
+ENV NODE_ENV=production
+
+# 1. Copy root AND web manifests (REQUIRED for workspace resolution)
+COPY package.json package-lock.json ./
+COPY packages/web/package.json ./packages/web/
+
+# 2. Install production dependencies for the SPECIFIC workspace
+# The --workspace flag ensures npm looks inside packages/web/package.json
+RUN npm config set strict-ssl false && \
+    npm ci --omit=dev --workspace=web --include-workspace-root
+
+# 3. Copy the built artifacts from the builder stage
+COPY --from=builder /simple-pbx/packages/web/build ./packages/web/build
+COPY --from=builder /simple-pbx/prisma ./prisma
+
+# 4. Critical: Symlink the node_modules so the web package sees the root
+RUN mkdir -p /simple-pbx/packages/web && \
+    ln -s /simple-pbx/node_modules /simple-pbx/packages/web/node_modules
+
+WORKDIR /simple-pbx/packages/web
+
+# 5. Set paths so binaries like react-router-serve are found
+ENV PATH="/simple-pbx/node_modules/.bin:${PATH}"
+
+CMD ["npm", "run", "prod"]

@@ -2,4 +2,6 @@ node_modules
 .env
 .env.*
 prisma/generated/
-.packages/web/build/
+packages/web/build/
+volumes/asterisk/config/
+nginx

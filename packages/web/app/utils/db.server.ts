@@ -1,6 +1,4 @@
 import { PrismaClient } from "~/prisma/client";
-
-import { singleton } from "./singleton.server";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
 const adapter = new PrismaMariaDb({
