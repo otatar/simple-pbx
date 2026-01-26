@@ -16,6 +16,7 @@ import type { Route } from "./+types/login";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Switch } from "~/components/ui/switch";
 import { Toaster } from "~/components/toaster";
+import logo from "~/assets/images/sp.png";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email({ message: "Valid email address required" }),
@@ -53,7 +54,7 @@ export async function action({ request }: Route.ActionArgs) {
         title: "Success",
         description: "Logged in successfully",
       },
-      { headers: response.headers }
+      { headers: response.headers },
     );
   } else {
     console.error("Response details:", response);
@@ -93,8 +94,8 @@ export default function LoginPage({ actionData, loaderData }: Route.ComponentPro
         <div className="flex flex-col gap-4 p-6 md:p-10">
           <div className="flex justify-center gap-2 md:justify-start">
             <a href="#" className="flex items-center gap-2 font-medium">
-              <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-                <Phone className="size-4" />
+              <div className="text-primary-foreground flex size-6 items-center justify-center rounded-md">
+                <img src={logo} />
               </div>
               SimplePBX
             </a>
@@ -167,7 +168,7 @@ export default function LoginPage({ actionData, loaderData }: Route.ComponentPro
         </div>
         <div className="bg-muted relative hidden lg:block">
           <img
-            src="/placeholder.svg"
+            src="/placeholder.png"
             alt="Image"
             className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
           />

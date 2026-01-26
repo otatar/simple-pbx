@@ -27,7 +27,8 @@ while ! nc -z -w 1 127.0.0.1 3306; do
   echo "MariaDB not ready yet... (attempt $COUNT)"
   sleep 1
 done
-sleep 2
+# While the database port is open, the database server might not be fully ready to accept connections.
+sleep 10
 
 chown -R asterisk:asterisk /etc/asterisk
 exec /usr/sbin/asterisk -f
