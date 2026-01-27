@@ -1,6 +1,6 @@
 import type { ClassOfService, Extension, Trunk, TrunkGroup } from "~/prisma/client";
 import { Logger } from "tslog";
-import { db } from "./libs/db";
+import db from "./libs/db";
 
 const log = new Logger();
 

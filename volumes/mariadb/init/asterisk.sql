@@ -564,6 +564,7 @@ CREATE TABLE `ps_contacts` (
   `uri` varchar(511) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `expiration_time` bigint DEFAULT NULL,
   `qualify_frequency` int DEFAULT NULL,
+  `qualify_2xx_only` enum('off','on','false','true','no','yes') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `outbound_proxy` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `path` text COLLATE utf8mb4_unicode_ci,
   `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

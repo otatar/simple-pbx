@@ -1,5 +1,5 @@
 
-FROM andrius/asterisk:22
+FROM andrius/asterisk:21.12.0_debian-trixie
 
 USER root
 
