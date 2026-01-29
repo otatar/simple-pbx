@@ -60,7 +60,7 @@ export async function createExtension(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    }
+    },
 ) {
   // We will use a transaction because we need to create more records in the database
   try {
@@ -81,6 +81,7 @@ export async function createExtension(
         data: {
           id: extension.extension,
           max_contacts: 1,
+          remove_existing: "true",
         },
       }),
       db.ps_auths.create({
@@ -101,7 +102,7 @@ export async function createExtension(
           context: "internal",
           disallow: "all",
           allow: [extension.codec_1, extension.codec_2, extension.codec_3, extension.codec_4].join(
-            ","
+            ",",
           ),
           dtmf_mode: extension.dtmf_mode,
           direct_media: extension.direct_media,
@@ -128,7 +129,7 @@ export async function updateExtension(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    }
+    },
 ) {
   await db.extension.update({
     where: { id: extension.id },
