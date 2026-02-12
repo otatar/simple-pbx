@@ -5,7 +5,7 @@ import { Label } from "./ui/label";
 export default function SimpleObjectDisplay({
   obj,
 }: {
-  obj: Record<string, string | number | boolean | Date | null>;
+  obj: Record<string, string | number | boolean | bigint | Date | null>;
 }) {
   return (
     <>

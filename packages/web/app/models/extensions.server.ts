@@ -1,3 +1,4 @@
+import { string } from "zod";
 import { Prisma, type Extension } from "~/prisma/client";
 import db from "~/utils/db.server";
 
@@ -13,6 +14,14 @@ export function getExtensions() {
       password: true,
     },
   });
+}
+
+export function getExtensionsWithRegInfo() {
+  return db.$queryRaw<
+    (Awaited<ReturnType<typeof db.extension.findFirst>> & {
+      contactId: string | null;
+    })[]
+  >`SELECT Extension.*, ps_contacts.id as contactId FROM Extension LEFT JOIN ps_contacts ON Extension.extension = ps_contacts.endpoint`;
 }
 
 export function checkExtension(extension: string) {

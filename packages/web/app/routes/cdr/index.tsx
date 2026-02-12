@@ -3,7 +3,6 @@ import { Outlet, useNavigate, useSubmit } from "react-router";
 import { DataTable, generateColumnHeaders } from "~/components/data-table";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import type { Route } from "./+types";
-import { useState } from "react";
 import { getCDRs } from "~/models/cdr.server";
 
 const columnsArray = [
@@ -26,13 +25,11 @@ export async function loader() {
 
 export default function CDR({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
-  const [selectedEntry, setSelectedEntry] = useState("");
-
   const onDetails = (id: string) => navigate(`/cdr/${id}`);
-
   const serializedData = loaderData.map((ext) => {
     return { ...ext, startTime: ext.startTime.toISOString() };
   });
+
   return (
     <div className="flex flex-col gap-4">
       <Card>

@@ -17,6 +17,10 @@ const data = {
           url: "/extensions",
         },
         {
+          title: "Registered Extensions",
+          url: "/inbound-registrations",
+        },
+        {
           title: "Trunks",
           url: "/trunks",
         },

@@ -13,6 +13,11 @@ export default [
         route(":id", "routes/extensions/extension.tsx"),
       ]),
     ]),
+    route("inbound-registrations", "routes/inbound-registrations/index.tsx", [
+      layout("routes/layout/modal-route-layout.tsx", { id: "in-registrations" }, [
+        route(":id", "routes/inbound-registrations/details.tsx"),
+      ]),
+    ]),
     route("trunks", "routes/trunks/index.tsx", [
       route("", "routes/trunks/trunks.tsx"),
       route("new", "routes/trunks/trunk-new.tsx"),

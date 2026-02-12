@@ -244,6 +244,7 @@ model ps_contacts {
   uri                  String?                           @db.VarChar(511)
   expiration_time      BigInt?
   qualify_frequency    Int?
+  qualify_2xx_only     ps_contacts_authenticate_qualify?
   outbound_proxy       String?                           @db.VarChar(255)
   path                 String?                           @db.Text
   user_agent           String?                           @db.VarChar(255)

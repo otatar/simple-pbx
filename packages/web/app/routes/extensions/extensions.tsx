@@ -1,12 +1,6 @@
-import { getExtensions } from "~/models/extensions.server";
+import { getExtensionsWithRegInfo } from "~/models/extensions.server";
 import type { Route } from "./+types/extensions";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 import { DataTable, generateColumnHeaders } from "~/components/data-table";
 import { BookOpen, Trash2 } from "lucide-react";
 import { Outlet, useNavigate, useSubmit } from "react-router";
@@ -18,13 +12,14 @@ const columnsArray = [
   { key: "name", title: "Name" },
   { key: "extension", title: "Extension" },
   { key: "email", title: "Email" },
+  { key: "contactId", title: "Registered", isBoolean: true },
   { key: "createdAt", title: "Created" },
 ];
 
 const columns = generateColumnHeaders(columnsArray);
 
 export async function loader() {
-  return await getExtensions();
+  return await getExtensionsWithRegInfo();
 }
 
 export default function Extensions({ loaderData }: Route.ComponentProps) {
@@ -43,8 +38,9 @@ export default function Extensions({ loaderData }: Route.ComponentProps) {
   };
 
   const serializedData = loaderData.map((ext) => {
-    return { ...ext, createdAt: ext.createdAt.toISOString() };
+    return { ...ext, createdAt: ext.createdAt.toISOString(), contactId: !!ext.contactId };
   });
+  console.log(serializedData);
 
   return (
     <div className="flex flex-col gap-4">

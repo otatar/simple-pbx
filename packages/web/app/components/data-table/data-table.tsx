@@ -32,12 +32,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import type { LucideIcon } from "lucide-react";
 import { PlusCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -94,7 +89,7 @@ export function DataTable<TData, TValue>({
           placeholder="Filter items..."
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-37.5 lg:w-62.5"
         />
         {onNew ? (
           <Button size="sm" onClick={onNew}>
@@ -110,25 +105,15 @@ export function DataTable<TData, TValue>({
               <TableRow className="hover:bg-inherit" key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      className="text-center"
-                    >
+                    <TableHead key={header.id} colSpan={header.colSpan} className="text-center">
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
                 {actions && actions.length > 0 ? (
-                  <TableHead
-                    key="actionsHeader"
-                    className="text-primary-foreground text-center"
-                  >
+                  <TableHead key="actionsHeader" className="text-primary-foreground text-center">
                     Actions
                   </TableHead>
                 ) : null}
@@ -138,16 +123,10 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="text-center">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                   {actions && actions.length > 0 ? (
@@ -165,10 +144,7 @@ export function DataTable<TData, TValue>({
                                   }}
                                 >
                                   {createElement(action.icon, {
-                                    className: cn(
-                                      "h-4 w-4",
-                                      `text-${action.iconColor}`,
-                                    ),
+                                    className: cn("h-4 w-4", `text-${action.iconColor}`),
                                   })}
                                 </Button>
                               </TooltipTrigger>
@@ -185,10 +161,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No data in database.
                 </TableCell>
               </TableRow>
