@@ -34,6 +34,10 @@ export async function getInboundRoutes() {
   return flattenedRoutes;
 }
 
+export function getInboundRoutesCount() {
+  return db.incomingRoute.count();
+}
+
 export async function checkInboundRoute(prefix: string) {
   return await db.incomingRoute.findFirst({
     where: {

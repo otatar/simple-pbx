@@ -24,6 +24,10 @@ export function getExtensionsWithRegInfo() {
   >`SELECT Extension.*, ps_contacts.id as contactId FROM Extension LEFT JOIN ps_contacts ON Extension.extension = ps_contacts.endpoint`;
 }
 
+export function getExtensionCount() {
+  return db.extension.count();
+}
+
 export function checkExtension(extension: string) {
   return db.extension.findFirst({
     where: { extension },

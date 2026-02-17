@@ -40,7 +40,6 @@ export default function Extensions({ loaderData }: Route.ComponentProps) {
   const serializedData = loaderData.map((ext) => {
     return { ...ext, createdAt: ext.createdAt.toISOString(), contactId: !!ext.contactId };
   });
-  console.log(serializedData);
 
   return (
     <div className="flex flex-col gap-4">

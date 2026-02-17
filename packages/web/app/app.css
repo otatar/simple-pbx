@@ -6,8 +6,8 @@
 
 @theme {
   --font-sans:
-    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 html,
@@ -59,6 +59,13 @@ body {
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --app-blue: oklch(0.62 0.17 256);
+  --app-red: oklch(0.63 0.21 25.001);
+  --app-green: oklch(0.65 0.18 142);
+  --app-orange: oklch(0.7 0.19 55);
+  --app-yellow: oklch(0.86 0.15 91);
+  --app-violet: oklch(0.6 0.2 296);
+  --app-pink: oklch(0.68 0.19 335);
 }
 
 .dark {
@@ -93,6 +100,13 @@ body {
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --app-blue: oklch(0.7 0.14 256);
+  --app-red: oklch(0.65 0.18 25);
+  --app-green: oklch(0.72 0.15 142);
+  --app-orange: oklch(0.75 0.16 55);
+  --app-yellow: oklch(0.88 0.14 91);
+  --app-violet: oklch(0.7 0.17 295);
+  --app-pink: oklch(0.75 0.16 335);
 }
 
 @theme inline {
@@ -131,6 +145,13 @@ body {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-app-blue: var(--app-blue);
+  --color-app-red: var(--app-red);
+  --color-app-green: var(--app-green);
+  --color-app-orange: var(--app-orange);
+  --color-app-yellow: var(--app-yellow);
+  --color-app-violet: var(--app-violet);
+  --color-app-pink: var(--app-pink);
 }
 
 @layer base {
@@ -147,3 +168,8 @@ body {
     @apply grid grid-cols-2 gap-2 justify-items-start;
   }
 }
+
+/* App colors:
+text-app-blue text-app-red text-app-green 
+text-app-orange text-app-yellow text-app-violet text-app-pink 
+*/

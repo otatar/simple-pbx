@@ -9,3 +9,7 @@ export function getContact(id: string) {
     where: { id },
   });
 }
+
+export function getContactCount() {
+  return db.ps_contacts.count();
+}

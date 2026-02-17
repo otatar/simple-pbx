@@ -16,7 +16,7 @@ import type { Route } from "./+types/login";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Switch } from "~/components/ui/switch";
 import { Toaster } from "~/components/toaster";
-import logo from "~/assets/images/sp.png";
+import logo from "~/assets/images/sp.svg";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email({ message: "Valid email address required" }),
@@ -168,7 +168,7 @@ export default function LoginPage({ actionData, loaderData }: Route.ComponentPro
         </div>
         <div className="bg-muted relative hidden lg:block">
           <img
-            src="/placeholder.png"
+            src="/placeholder1.png"
             alt="Image"
             className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
           />

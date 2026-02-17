@@ -50,9 +50,13 @@ export async function getNumberManipulations() {
   return flattenedNumberManipulations;
 }
 
+export function getNumberManipulationsCount() {
+  return db.numberManipulation.count();
+}
+
 export async function getNumberManipulationForTrunk(
   trunkId: number,
-  direction: "outbound" | "inbound"
+  direction: "outbound" | "inbound",
 ) {
   const numberManipulation = await db.numberManipulation.findMany({
     where: {
@@ -67,7 +71,7 @@ export async function getNumberManipulationForTrunk(
 }
 
 export async function createNumberManipulation(
-  numMan: Prisma.NumberManipulationUncheckedCreateInput
+  numMan: Prisma.NumberManipulationUncheckedCreateInput,
 ) {
   const numberManipulation = await db.numberManipulation.create({
     data: numMan,

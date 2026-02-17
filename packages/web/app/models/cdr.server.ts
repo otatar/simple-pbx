@@ -17,3 +17,27 @@ export async function getCDRById(id: number) {
 
   return cdr;
 }
+
+export function getCdrCount() {
+  return db.cdr.count();
+}
+
+export function getLastTenDaysInboundCDRData() {
+  const today = new Date();
+  const tenDaysAgo = new Date(today);
+  tenDaysAgo.setDate(today.getDate() - 9);
+
+  return db.$queryRaw<
+    { call_date: string; call_count: number }[]
+  >`SELECT DATE(startTime) AS call_date, COUNT(*) AS call_count FROM Cdr WHERE startTime >= ${tenDaysAgo} AND destinationType = "extension" GROUP BY DATE(startTime) ORDER BY call_date ASC;`;
+}
+
+export function getLastTenDaysOutboundCDRData() {
+  const today = new Date();
+  const tenDaysAgo = new Date(today);
+  tenDaysAgo.setDate(today.getDate() - 9);
+
+  return db.$queryRaw<
+    { call_date: string; call_count: number }[]
+  >`SELECT DATE(startTime) AS call_date, COUNT(*) AS call_count FROM Cdr WHERE startTime >= ${tenDaysAgo} AND sourceType = "extension" GROUP BY DATE(startTime) ORDER BY call_date ASC;`;
+}

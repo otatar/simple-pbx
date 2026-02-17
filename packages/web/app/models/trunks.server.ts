@@ -11,6 +11,10 @@ export function checkTrunk(name: string) {
   });
 }
 
+export function getTrunksCount() {
+  return db.trunk.count();
+}
+
 export async function getTrunk(id: number) {
   const trunk = await db.trunk.findFirst({
     where: { id },
@@ -74,7 +78,7 @@ export async function createTrunk(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    }
+    },
 ) {
   // We will use a transaction because we need to create more records in the database
   try {
@@ -169,7 +173,7 @@ export async function updateTrunk(
       codec_2?: string;
       codec_3?: string;
       codec_4?: string;
-    }
+    },
 ) {
   // We will use a transaction because we need to create more records in the database
   try {

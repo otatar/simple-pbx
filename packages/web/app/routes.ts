@@ -6,7 +6,7 @@ export default [
   route("logout", "routes/auth/logout.tsx"),
   route("account", "routes/auth/account.tsx"),
   layout("./routes/layout/layout.tsx", [
-    index("routes/dashboard.tsx"),
+    index("routes/dashboard/status.tsx"),
     route("extensions", "routes/extensions/extensions.tsx", [
       layout("routes/layout/modal-route-layout.tsx", [
         route("new", "routes/extensions/extension-new.tsx"),

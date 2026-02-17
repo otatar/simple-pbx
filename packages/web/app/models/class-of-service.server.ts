@@ -5,6 +5,10 @@ export async function getCos() {
   return await db.classOfService.findMany();
 }
 
+export function getCosCount() {
+  return db.classOfService.count();
+}
+
 export async function getCosById(id: number) {
   return await db.classOfService.findFirst({
     where: { id },
