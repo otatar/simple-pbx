@@ -9,6 +9,9 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { getStorageItem, setStorageItem, THEME } from "./utils/local-storage";
+import { getSystemTheme } from "./utils/theme";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -24,9 +27,42 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined" || !window.localStorage) {
+      return "dark";
+    }
+    return getStorageItem(THEME) || getSystemTheme();
+  });
+
+  useLayoutEffect(() => {
+    const storedTheme = getStorageItem(THEME);
+    if (storedTheme) {
+      setTheme(storedTheme);
+    }
+  }, []);
+
+  useEffect(() => {
+    setStorageItem(THEME, theme);
+  }, [theme]);
   return (
     <html lang="en">
       <head>
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Sets correct theme on initial load
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                try {
+                var theme = localStorage.getItem("theme");
+                if (!theme) {
+                  theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                }
+                document.documentElement.setAttribute("data-theme", theme);
+              } catch (_) {}
+            })();
+          `,
+          }}
+        />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
@@ -53,9 +89,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
     details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+      error.status === 404 ? "The requested page could not be found." : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

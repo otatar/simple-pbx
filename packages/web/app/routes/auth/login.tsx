@@ -17,6 +17,8 @@ import { Label } from "@radix-ui/react-dropdown-menu";
 import { Switch } from "~/components/ui/switch";
 import { Toaster } from "~/components/toaster";
 import logo from "~/assets/images/sp.svg";
+import { getCurrentTheme } from "~/utils/theme";
+import { th } from "zod/v4/locales";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email({ message: "Valid email address required" }),
@@ -69,6 +71,7 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function LoginPage({ actionData, loaderData }: Route.ComponentProps) {
   const { toast } = loaderData;
+  const theme = getCurrentTheme();
   const form = useRemixForm<FormData>({
     mode: "onSubmit",
     defaultValues: {
@@ -167,8 +170,9 @@ export default function LoginPage({ actionData, loaderData }: Route.ComponentPro
           </div>
         </div>
         <div className="bg-muted relative hidden lg:block">
+          {theme === "dark" ? <p>Dark</p> : <p>Light</p>}
           <img
-            src="/placeholder1.png"
+            src={theme == "dark" ? "/placeholder1-dark.png" : "/placeholder1.png"}
             alt="Image"
             className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
           />

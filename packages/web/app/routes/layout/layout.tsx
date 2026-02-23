@@ -15,9 +15,9 @@ import { combineHeaders, getToast } from "~/utils/toast.server";
 import type { Route } from "./+types/layout";
 import { Toaster } from "~/components/toaster";
 import db from "~/utils/db.server";
-import { authClient } from "~/utils/auth.client";
 import { authMiddleware } from "middleware/auth";
 import { auth } from "~/utils/auth.server";
+import { ThemeToggle } from "./theme-toggle";
 
 const SUB_BRAND = "Let it simply ring! ";
 
@@ -76,6 +76,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
                   ))}
                 </BreadcrumbList>
               </Breadcrumb>
+              <ThemeToggle />
               <NavUser user={user} />
             </div>
           </header>
