@@ -11,11 +11,8 @@ import {
   updateOutboundRoute,
 } from "~/models/outbound-routing.server";
 import { getTrunks } from "~/models/trunks.server";
-import type { TrunkGroup } from "@prisma/client";
-import OutboundRouteEditor, {
-  resolver,
-  type FormData,
-} from "./outbound-route-editor";
+import type { TrunkGroup } from "~/prisma/client";
+import OutboundRouteEditor, { resolver, type FormData } from "./outbound-route-editor";
 import type { Route } from "./+types/outbound-route";
 
 export async function loader({ request, params }: Route.LoaderArgs) {

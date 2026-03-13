@@ -3,13 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRemixForm, RemixFormProvider } from "remix-hook-form";
 
 import { Form, Link } from "react-router";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useDelayedIsPending } from "~/utils/misc";
@@ -20,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import type { NumberManipulation, Trunk } from "@prisma/client";
+import type { NumberManipulation, Trunk } from "~/prisma/client";
 import { Loader2 } from "lucide-react";
 
 const numberManipulationTypes = [
@@ -34,19 +28,12 @@ export const schema = z.object({
   id: z.number().optional(),
   trunkId: z.number(),
   name: z.string().min(1, "Name is required"),
-  type: z.enum(numberManipulationValues, {
-    required_error: "Type is required",
-  }),
-  direction: z.enum(directionValues, {
-    required_error: "Direction is required",
-  }),
+  type: z.enum(numberManipulationValues, "Type is required"),
+  direction: z.enum(directionValues, "Direction is required"),
   match: z.string().optional(),
-  priority: z.coerce.number({ required_error: "Port is required" }).min(0),
-  stripBegin: z.coerce
-    .number()
-    .min(0, "Strip cannot be less than 0")
-    .optional(),
-  stripEnd: z.coerce.number().min(0, "Strip cannot be less than 0").optional(),
+  priority: z.coerce.number<number>("Port is required").min(0),
+  stripBegin: z.coerce.number<number>().min(0, "Strip cannot be less than 0").optional(),
+  stripEnd: z.coerce.number<number>().min(0, "Strip cannot be less than 0").optional(),
   prepend: z.string().optional(),
   append: z.string().optional(),
 });
@@ -96,12 +83,7 @@ export default function OutboundNumberManipulationEditor({
               <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                 <FormLabel>ID:</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    disabled
-                    className="bg-gray-100"
-                  />
+                  <Input type="number" {...field} disabled className="bg-gray-100" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,10 +108,7 @@ export default function OutboundNumberManipulationEditor({
             render={({ field }) => (
               <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                 <FormLabel>Trunk:</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value.toString()}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value.toString()}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue />
@@ -166,10 +145,7 @@ export default function OutboundNumberManipulationEditor({
             render={({ field }) => (
               <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                 <FormLabel>Type:</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue />
@@ -193,10 +169,7 @@ export default function OutboundNumberManipulationEditor({
             render={({ field }) => (
               <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                 <FormLabel>Direction:</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue />
@@ -281,9 +254,7 @@ export default function OutboundNumberManipulationEditor({
           />
           <div className="flex items-center justify-start space-x-2 w-full border-t pt-2 mt-4">
             <Button type="submit">
-              {isSubmitting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {numberManipulation ? "Update" : "Create"}
             </Button>
             <Link to=".." relative="path">

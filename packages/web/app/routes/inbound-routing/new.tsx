@@ -1,28 +1,25 @@
 import { getTrunks } from "~/models/trunks.server";
-import InboundRouteEditor, {
-  resolver,
-  type FormData,
-} from "./inbound-route-editor";
+import InboundRouteEditor, { resolver, type FormData } from "./inbound-route-editor";
 import { getCos } from "~/models/class-of-service.server";
-import type { TrunkGroup } from "@prisma/client";
+import type { TrunkGroup } from "~/prisma/client";
 import type { Route } from "./+types/new";
 import { getValidatedFormData } from "remix-hook-form";
 import { badRequest } from "~/utils/request.server";
 import { redirectWithToast } from "~/utils/toast.server";
-import {
-  checkInboundRoute,
-  createInboundRoute,
-} from "~/models/inbound-routing.server";
+import { checkInboundRoute, createInboundRoute } from "~/models/inbound-routing.server";
+import { getExtensions } from "~/models/extensions.server";
 
 export async function loader() {
   const trunks = await getTrunks();
   const trunkGroups = [] as TrunkGroup[];
   const coss = await getCos();
+  const extensions = await getExtensions();
 
   return {
     trunks,
     trunkGroups,
     coss,
+    extensions,
   };
 }
 
@@ -59,7 +56,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function NewInboundRouting({
-  loaderData: { trunks, trunkGroups },
+  loaderData: { trunks, trunkGroups, extensions },
 }: Route.ComponentProps) {
-  return <InboundRouteEditor trunkGroups={trunkGroups} trunks={trunks} />;
+  return <InboundRouteEditor trunkGroups={trunkGroups} trunks={trunks} extensions={extensions} />;
 }

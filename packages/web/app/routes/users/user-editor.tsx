@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useDelayedIsPending } from "~/utils/misc";
 import { Eye, EyeOff, Loader2, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import type { User, WebUser } from "@prisma/client";
+import type { User } from "~/prisma/client";
 
 const roles = ["user", "admin"] as const;
 
@@ -29,11 +29,11 @@ export const schema = z.object({
     .min(1, "Password is required")
     .regex(
       new RegExp("(^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[.#?!@$%^&*-]).{6,}$)"),
-      "Minimum length is six characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+      "Minimum length is six characters, at least one uppercase letter, one lowercase letter, one number and one special character",
     ),
   name: z.string().min(1, "Name is required"),
-  role: z.string(),
-  banned: z.coerce.boolean(),
+  role: z.enum(roles, "Role is required"),
+  banned: z.coerce.boolean<boolean>(),
 });
 export type FormData = z.infer<typeof schema>;
 export const resolver = zodResolver(schema);
@@ -47,7 +47,7 @@ export default function UserEditor({ user }: { user?: User }) {
       email: user?.email ?? "",
       name: user?.name ?? "",
       password: user ? "Test.01" : "",
-      role: user?.role ?? "user",
+      role: user?.role == "admin" || user?.role == "user" ? user.role : "user",
       banned: user?.banned ?? false,
     },
     submitConfig: {

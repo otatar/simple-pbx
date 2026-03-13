@@ -6,7 +6,7 @@ import { data } from "react-router";
  */
 type BadRequestData =
   | { formErrors: string; defaultValues: Partial<{ email: string; password: string }> }
-  | { errors: Record<string, any>; defaultValues: Partial<{ email: string; password: string }> };
+  | { errors: Record<string, any>; defaultValues: Record<string, any> };
 
 export const badRequest = <T extends BadRequestData>(receivedData: T) =>
   data<T>(receivedData, { status: 400 });

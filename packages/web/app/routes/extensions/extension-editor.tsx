@@ -3,13 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRemixForm, RemixFormProvider } from "remix-hook-form";
 
 import { Form, Link } from "react-router";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useDelayedIsPending } from "~/utils/misc";
@@ -22,13 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import type { ClassOfService, Extension, ps_endpoints } from "@prisma/client";
+import type { ClassOfService, Extension, ps_endpoints } from "~/prisma/client";
 import InputWithTwoButtons from "./input-with-two-buttons";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "~/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Separator } from "~/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 
@@ -62,12 +52,10 @@ export const schema = z.object({
     .string()
     .min(1, "Password is required")
     .regex(
-      new RegExp(
-        "(^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[.,_+=<>#?!@$%^&*-]).{6,}$)",
-      ),
+      new RegExp("(^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[.,_+=<>#?!@$%^&*-]).{6,}$)"),
       "Minimum length is six characters, at least one uppercase letter, one lowercase letter, one number and one special character",
     ),
-  cosId: z.coerce.number(),
+  cosId: z.coerce.number<number>(),
   callRecord: z.enum(yesOrNo).optional(),
   phoneBook: z.enum(yesOrNo).optional(),
   language: z.enum(languages).optional(),
@@ -101,10 +89,7 @@ type ExtensionEditorProps = {
   coss: ClassOfService[];
 };
 
-export default function ExtensionEditor({
-  extension,
-  coss,
-}: ExtensionEditorProps) {
+export default function ExtensionEditor({ extension, coss }: ExtensionEditorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const form = useRemixForm<FormData>({
     mode: "onSubmit",
@@ -143,15 +128,9 @@ export default function ExtensionEditor({
   return (
     <>
       {extension ? (
-        <Title
-          title="Update extension"
-          text="Here you can update extension data!"
-        />
+        <Title title="Update extension" text="Here you can update extension data!" />
       ) : (
-        <Title
-          title="Create extension"
-          text="Here you can create a new extension!"
-        />
+        <Title title="Create extension" text="Here you can create a new extension!" />
       )}
       <RemixFormProvider {...form}>
         <Form onSubmit={form.handleSubmit}>
@@ -164,12 +143,7 @@ export default function ExtensionEditor({
                   <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                     <FormLabel>ID:</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        disabled
-                        className="bg-gray-100"
-                      />
+                      <Input type="number" {...field} disabled className="bg-gray-100" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -234,11 +208,7 @@ export default function ExtensionEditor({
             <CollapsibleTrigger asChild>
               <Button variant="secondary" size="sm">
                 Advanced
-                {isOpen ? (
-                  <ChevronsUp className="h-4 w-4" />
-                ) : (
-                  <ChevronsDown className="h-4 w-4" />
-                )}
+                {isOpen ? <ChevronsUp className="h-4 w-4" /> : <ChevronsDown className="h-4 w-4" />}
                 <span className="sr-only">Toggle</span>
               </Button>
             </CollapsibleTrigger>
@@ -249,10 +219,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Class of Service:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -276,10 +243,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Language:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -303,10 +267,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Transport:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -327,10 +288,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>DTMF Mode:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -354,10 +312,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 1:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -381,10 +336,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 2:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -408,10 +360,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 3:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -435,10 +384,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Codec 4:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -462,10 +408,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Direct Media:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -486,10 +429,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Direct Media Method:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -513,10 +453,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Ice Support:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -537,10 +474,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Rewrite Contact:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -561,10 +495,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>WebRTC:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -585,10 +516,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Ice Send Diversion:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -609,10 +537,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Send PAI:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -633,10 +558,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Send RPID:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -657,10 +579,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Show in phonebook:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -681,10 +600,7 @@ export default function ExtensionEditor({
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Record calls:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -703,9 +619,7 @@ export default function ExtensionEditor({
           </Collapsible>
           <div className="flex items-center justify-start space-x-2 w-full border-t pt-2 mt-4">
             <Button type="submit">
-              {isSubmitting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {extension ? "Update" : "Create"}
             </Button>
             <Link to=".." relative="path">

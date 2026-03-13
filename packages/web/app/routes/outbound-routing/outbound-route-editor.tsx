@@ -1,23 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type {
-  ClassOfService,
-  OutgoingRoute,
-  Trunk,
-  TrunkGroup,
-} from "@prisma/client";
+import type { ClassOfService, OutgoingRoute, Trunk, TrunkGroup } from "~/prisma/client";
 import { Loader2, Terminal } from "lucide-react";
 import { Form, Link } from "react-router";
 import { RemixFormProvider, useRemixForm } from "remix-hook-form";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Button } from "~/components/ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import {
   Select,
@@ -37,12 +26,10 @@ export const schema = z.object({
     .string()
     .min(1, "Prefix is required")
     .regex(/^(\d*)([xX]*)$/, "Prefix must be digits or 'x'"),
-  destinationType: z.enum(destinationTypes, {
-    required_error: "Destination type is required",
-  }),
-  trunkId: z.coerce.number().optional(),
-  trunkGroupId: z.coerce.number().optional(),
-  cosId: z.coerce.number(),
+  destinationType: z.enum(destinationTypes, "Destination type is required"),
+  trunkId: z.coerce.number<number>().optional(),
+  trunkGroupId: z.coerce.number<number>().optional(),
+  cosId: z.coerce.number<number>(),
 });
 export type FormData = z.infer<typeof schema>;
 export const resolver = zodResolver(schema);
@@ -76,15 +63,9 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
   return (
     <>
       {props.route ? (
-        <Title
-          title="Update outbound route"
-          text="Here you can update route data!"
-        />
+        <Title title="Update outbound route" text="Here you can update route data!" />
       ) : (
-        <Title
-          title="Create outbound route"
-          text="Here you can create a outbound route!"
-        />
+        <Title title="Create outbound route" text="Here you can create a outbound route!" />
       )}
       <RemixFormProvider {...form}>
         <Form onSubmit={form.handleSubmit}>
@@ -97,12 +78,7 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
                   <FormItem className="grid grid-cols-2 justify-items-start gap-2">
                     <FormLabel>ID:</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        disabled
-                        className="bg-gray-100"
-                      />
+                      <Input type="number" {...field} disabled className="bg-gray-100" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -140,10 +116,7 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Destination Type:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -167,10 +140,7 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Trunk:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -178,10 +148,7 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
                       </FormControl>
                       <SelectContent>
                         {props.trunks.map((trunk) => (
-                          <SelectItem
-                            key={trunk.id}
-                            value={trunk.id.toString()}
-                          >
+                          <SelectItem key={trunk.id} value={trunk.id.toString()}>
                             {trunk.name}
                           </SelectItem>
                         ))}
@@ -197,10 +164,7 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Trunk Group:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -224,10 +188,7 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
                 render={({ field }) => (
                   <FormItem className="inline-form-item w-full">
                     <FormLabel>Class of Service:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue />
@@ -249,9 +210,7 @@ export default function OutboundRouteEditor(props: OutboundRouteEditorProps) {
           </div>
           <div className="flex items-center justify-start space-x-2 w-full border-t pt-2 mt-4">
             <Button type="submit">
-              {isSubmitting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {props.route ? "Update" : "Create"}
             </Button>
             <Link to=".." relative="path">

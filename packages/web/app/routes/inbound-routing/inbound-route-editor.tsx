@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Extension, IncomingRoute, Trunk, TrunkGroup } from "@prisma/client";
+import type { Extension, IncomingRoute, Trunk, TrunkGroup } from "~/prisma/client";
 import { Loader2, Terminal } from "lucide-react";
 import { Form, Link } from "react-router";
 import { RemixFormProvider, useRemixForm } from "remix-hook-form";
@@ -26,12 +26,10 @@ export const schema = z.object({
     .string()
     .min(1, "Prefix is required")
     .regex(/^(\d*)([xX]*)$/, "Prefix must be digits or 'x'"),
-  destinationType: z.enum(destinationTypes, {
-    required_error: "Destination type is required",
-  }),
-  trunkId: z.coerce.number().optional(),
-  trunkGroupId: z.coerce.number().optional(),
-  extensionId: z.coerce.number().optional(),
+  destinationType: z.enum(destinationTypes, "Destination type is required"),
+  trunkId: z.coerce.number<number>().optional(),
+  trunkGroupId: z.coerce.number<number>().optional(),
+  extensionId: z.coerce.number<number>().optional(),
 });
 export type FormData = z.infer<typeof schema>;
 export const resolver = zodResolver(schema);

@@ -1,17 +1,11 @@
 import { getTrunks } from "~/models/trunks.server";
-import OutboundRouteEditor, {
-  resolver,
-  type FormData,
-} from "./outbound-route-editor";
+import OutboundRouteEditor, { resolver, type FormData } from "./outbound-route-editor";
 import { getCos } from "~/models/class-of-service.server";
-import type { TrunkGroup } from "@prisma/client";
+import type { TrunkGroup } from "~/prisma/client";
 import type { Route } from "./+types/new";
 import { getValidatedFormData } from "remix-hook-form";
 import { badRequest } from "~/utils/request.server";
-import {
-  checkOutboundRoute,
-  createOutboundRoute,
-} from "~/models/outbound-routing.server";
+import { checkOutboundRoute, createOutboundRoute } from "~/models/outbound-routing.server";
 import { redirectWithToast } from "~/utils/toast.server";
 
 export async function loader() {
@@ -61,11 +55,5 @@ export async function action({ request }: Route.ActionArgs) {
 export default function NewOutboundRouting({
   loaderData: { trunks, trunkGroups, coss },
 }: Route.ComponentProps) {
-  return (
-    <OutboundRouteEditor
-      trunkGroups={trunkGroups}
-      trunks={trunks}
-      coss={coss}
-    />
-  );
+  return <OutboundRouteEditor trunkGroups={trunkGroups} trunks={trunks} coss={coss} />;
 }

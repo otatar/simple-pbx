@@ -15,8 +15,8 @@ import { redirectWithToast } from "~/utils/toast.server";
 
 const schema = z.object({
   id: z.number(),
-  ringTimeout: z.coerce.number().min(0, "Ring timeout must be a positive number"),
-  maxCallDuration: z.coerce.number().min(0, "Max call duration must be a positive number"),
+  ringTimeout: z.coerce.number<number>().min(0, "Ring timeout must be a positive number"),
+  maxCallDuration: z.coerce.number<number>().min(0, "Max call duration must be a positive number"),
   subBranding: z.optional(z.string()),
 });
 
