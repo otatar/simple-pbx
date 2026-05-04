@@ -4,6 +4,8 @@
   "description": "A Simple PBX based on realtime asterisk and agi",
   "private": true,
   "scripts": {
+    "dev": "concurrently -n \"agi,web\" -c \"magenta,blue\" \"npm run dev:agi\" \"npm run dev:web\"",
+    "setup": "npm install && cp -n .env.example .env && cp -n packages/web/.env.example packages/web/.env.development && npm run db:migrate && npm run db:seed",
     "dev:agi": "tsx packages/simple-pbx-agi/agi-server.ts",
     "dev:web": "npm run dev --workspace packages/web",
     "start:web": "npm run start --workspace packages/web",
@@ -33,6 +35,7 @@
     "@types/node": "^25.0.7",
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",

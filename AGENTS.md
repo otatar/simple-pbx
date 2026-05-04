@@ -78,7 +78,7 @@ npx vitest run path/to/test-file.test.ts
 - **Indentation**: 2 spaces (no tabs)
 - **Line Length**: Aim for 80-100 characters
 
-Configured via `.prittierrc` and ESLint.
+Configured via `.prettierrc` and ESLint.
 
 ### Import Order
 

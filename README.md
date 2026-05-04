@@ -36,7 +36,18 @@ simple-pbx/
 - Asterisk server
 - MariaDB or compatible database
 
-## Installation
+## Quick Start
+
+The fastest way to get started is using the provided **VS Code Devcontainer**. 
+
+1. Open the project in VS Code
+2. Click "Reopen in Container" when prompted (or use the Command Palette)
+3. Once the container is ready, run:
+```bash
+npm run dev
+```
+
+### Manual Installation
 
 1. Clone the repository:
 ```bash
@@ -44,32 +55,24 @@ git clone <repository-url>
 cd simple-pbx
 ```
 
-2. Install dependencies:
+2. Run the setup script (installs dependencies, sets up .env, and migrates DB):
 ```bash
-npm install
-```
-
-3. Set up environment variables:
-```bash
-# Copy and configure environment files
-cp .env.example .env
-cp packages/web/.env.development.example packages/web/.env.development
-```
-
-4. Run database migrations:
-```bash
-npm run db:migrate
+npm run setup
 ```
 
 ## Development
 
-Start the AGI server:
+Start both the AGI server and web interface:
 ```bash
-npm run dev:agi
+npm run dev
 ```
 
-Start the web development server:
+Or start them separately:
 ```bash
+# AGI server only
+npm run dev:agi
+
+# Web interface only
 npm run dev:web
 ```
 
