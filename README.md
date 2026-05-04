@@ -1,87 +1,133 @@
-# Welcome to React Router!
+# Simple PBX
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A modern PBX (Private Branch Exchange) system built with Asterisk AGI and React web interface.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Overview
+
+Simple PBX is a monorepo project that combines:
+
+- **AGI Server**: An Asterisk Gateway Interface server for handling phone calls
+- **Web Interface**: A React application for managing the PBX system
+
+## Project Structure
+
+```
+simple-pbx/
+├── packages/
+│   ├── simple-pbx-agi/     # AGI server for Asterisk call handling
+│   └── web/                # React web application
+├── prisma/                 # Database schema and migrations
+└── README.md              # This file
+```
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- Call routing and handling through Asterisk
+- Web-based management interface
+- Database integration with Prisma and MariaDB
+- Real-time call processing
+- Extension and trunk management
+- Call detail records (CDR) tracking
 
-## Getting Started
+## Prerequisites
 
-### Installation
+- Node.js (v18 or higher)
+- npm (v8 or higher)
+- Asterisk server
+- MariaDB or compatible database
 
-Install the dependencies:
+## Installation
 
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd simple-pbx
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-### Development
-
-Start the development server with HMR:
-
+3. Set up environment variables:
 ```bash
-npm run dev
+# Copy and configure environment files
+cp .env.example .env
+cp packages/web/.env.development.example packages/web/.env.development
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
+4. Run database migrations:
 ```bash
-npm run build
+npm run db:migrate
 ```
 
-## Deployment
+## Development
 
-### Docker Deployment
-
-To build and run using Docker:
-
+Start the AGI server:
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+npm run dev:agi
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+Start the web development server:
+```bash
+npm run dev:web
 ```
 
-## Styling
+## Production
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+### Using Docker (Recommended)
+
+The project includes Dockerfiles for all components and a docker-compose.yaml for orchestrating the entire system.
+
+1. Configure environment variables in the `.env` file
+2. Run the entire system with docker-compose:
+```bash
+docker-compose up -d
+```
+
+This will start:
+- Web interface (React application)
+- AGI server (Node.js application)
+- MariaDB database
+- Asterisk server
+- Nginx proxy manager
+
+### Manual Production Deployment
+
+Build the web application:
+```bash
+npm run build:web
+```
+
+Start the production web server:
+```bash
+npm run start:web
+```
+
+## Database
+
+Manage the database with these commands:
+
+- Run migrations: `npm run db:migrate`
+- Deploy migrations: `npm run db:migrate:deploy`
+- Open Prisma Studio: `npm run db:studio`
+- Seed database: `npm run db:seed`
+
+## Testing
+
+Run tests for the web application:
+```bash
+npm run test:web
+```
+
+Run tests for the AGI server:
+```bash
+npm run test:agi
+```
+
+## Documentation
+
+- [AGENTS.md](AGENTS.md) - Development guide for AI agents
+- [React Router docs](https://reactrouter.com/)
 
 ---
-
-Built with ❤️ using React Router.
