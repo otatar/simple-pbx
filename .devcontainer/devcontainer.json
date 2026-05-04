@@ -1,0 +1,28 @@
+{
+	"name": "Simple PBX Dev Environment",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/simple-pbx",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"Prisma.prisma",
+				"ms-vscode.vscode-typescript-next",
+				"vitest.explorer",
+				"bradlc.vscode-tailwindcss"
+			],
+			"settings": {
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				}
+			}
+		}
+	},
+	"remoteUser": "node",
+	"postCreateCommand": "npm install && npx prisma generate",
+	"forwardPorts": [3000, 5173, 4573, 3306]
+}

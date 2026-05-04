@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspaces/simple-pbx:cached
+    
+    # Overrides default command so container doesn't exit.
+    command: sleep infinity
+
+    # Runs app as 'node' user
+    user: node
+
+    # Connect to the database and asterisk
+    depends_on:
+      - database
+      - asterisk
+
+    environment:
+      DATABASE_HOST: database
+      DATABASE_USER: pbxuser
+      DATABASE_PASSWORD: pbxpassword
+      DATABASE_NAME: asterisk
+      DATABASE_PORT: 3306
+
+  database:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: asterisk
+      MYSQL_USER: pbxuser
+      MYSQL_PASSWORD: pbxpassword
+    volumes:
+      - ../volumes/mariadb/init:/docker-entrypoint-initdb.d
+
+  asterisk:
+    build:
+      context: ../asterisk
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    network_mode: "host"
+    environment:
+      DATABASE_HOST: localhost # Host mode, so localhost works
+      DATABASE_USER: pbxuser
+      DATABASE_PASSWORD: pbxpassword
+    volumes:
+      - ../volumes/asterisk/templates:/asterisk/templates
+      - ../volumes/asterisk/config:/etc/asterisk
