@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 import { Dialog, DialogContent, DialogTitle } from "~/components/ui/dialog";
 
 type PageModalProps = {
-  title: string;
+  title?: string;
 };
 
 export default function ModalRouteLayout(
@@ -16,7 +16,7 @@ export default function ModalRouteLayout(
         className="min-w-1/3 [&>button:last-child]:hidden"
         aria-describedby={undefined}
       >
-        <DialogTitle>{props.title}</DialogTitle>
+        {props.title && <DialogTitle>{props.title}</DialogTitle>}
         <Outlet />
       </DialogContent>
     </Dialog>

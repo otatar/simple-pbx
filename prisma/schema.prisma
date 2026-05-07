@@ -176,6 +176,24 @@ model GlobalSettings {
   createdBy       String?
 }
 
+enum ContactType {
+  mobile
+  landline
+  satellite
+}
+
+model ExternalPhonebook {
+  id           Int        @id @default(autoincrement())
+  name         String
+  phoneNumber  String     @unique
+  email        String?    @default("")
+  company      String?    @default("")
+  notes        String?    @default("")
+  contactType  ContactType
+  createdAt    DateTime   @default(now())
+  createdBy    String?
+}
+
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model cdr {
   accountcode String?   @db.VarChar(80)

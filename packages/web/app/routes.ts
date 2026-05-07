@@ -13,6 +13,12 @@ export default [
         route(":id", "routes/extensions/extension.tsx"),
       ]),
     ]),
+    route("phonebook", "routes/phonebook/phonebook.tsx", [
+      layout("routes/layout/modal-route-layout.tsx", { id: "phonebook" }, [
+        route("new", "routes/phonebook/new.tsx"),
+        route(":id", "routes/phonebook/$id.tsx"),
+      ]),
+    ]),
     route("inbound-registrations", "routes/inbound-registrations/index.tsx", [
       layout("routes/layout/modal-route-layout.tsx", { id: "in-registrations" }, [
         route(":id", "routes/inbound-registrations/details.tsx"),

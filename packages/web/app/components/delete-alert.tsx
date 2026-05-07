@@ -14,17 +14,18 @@ type DeleteAlertProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onActionClick?: () => void;
+  title?: string;
+  description?: string;
 };
 
-export default function DeleteAlert({ id, open, onOpenChange, onActionClick }: DeleteAlertProps) {
+export default function DeleteAlert({ id, open, onOpenChange, onActionClick, title, description }: DeleteAlertProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete confirmation?</AlertDialogTitle>
+          <AlertDialogTitle>{title || "Delete confirmation?"}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete entry with id: {id} in the
-            database.
+            {description || `This action cannot be undone. This will permanently delete entry with id: ${id} in the database.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

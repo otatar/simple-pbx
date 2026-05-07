@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route, Settings2, Network, Sparkles, Signpost, ScrollText, Users } from "lucide-react";
+import { Route, Settings2, Network, Sparkles, Signpost, ScrollText, Users, BookA } from "lucide-react";
 
 import { NavMain } from "~/components/nav-main";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "~/components/ui/sidebar";
@@ -55,6 +55,11 @@ const data = {
       title: "Call Detail Records",
       url: "/cdr",
       icon: ScrollText,
+    },
+    {
+      title: "Phonebook",
+      url: "/phonebook",
+      icon: BookA,
     },
   ],
   navAdmin: [

@@ -4,7 +4,7 @@ import { badRequest } from "~/utils/request.server";
 import CustomErrorBoundary from "~/components/custom-error-boundary";
 import { getValidatedFormData } from "remix-hook-form";
 import { getTrunks } from "~/models/trunks.server";
-import type { TrunkGroup } from "@prisma/client";
+import type { TrunkGroup } from "~/prisma/client";
 import InboundRouteEditor, { resolver, type FormData } from "./inbound-route-editor";
 import type { Route } from "./+types/inbound-route";
 import {

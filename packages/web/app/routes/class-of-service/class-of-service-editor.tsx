@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ClassOfService } from "@prisma/client";
+import type { ClassOfService } from "~/prisma/client";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { Form, Link } from "react-router";
@@ -13,7 +13,7 @@ import { useDelayedIsPending } from "~/utils/misc";
 export const schema = z.object({
   id: z.number().optional(),
   name: z.string().min(1, "Name is required"),
-  cos: z.coerce.number().min(0, "Class of Service is required"),
+  cos: z.coerce.number<number>().min(0, "Class of Service is required"),
 });
 
 export type FormData = z.infer<typeof schema>;
