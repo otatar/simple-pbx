@@ -42,7 +42,10 @@ services:
       context: ../asterisk
       dockerfile: Dockerfile
     restart: unless-stopped
-    network_mode: "host"
+    # network_mode: "host"
+    ports:
+      - "5060:5060/udp"       # SIP Signaling (Must specify /udp)
+      - "10000-10010:10000-10010/udp" # Tight RTP Range mapped explicitly 
     environment:
       DATABASE_HOST: localhost # Host mode, so localhost works
       DATABASE_USER: pbxuser

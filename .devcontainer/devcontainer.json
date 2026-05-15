@@ -24,5 +24,6 @@
 	},
 	"remoteUser": "node",
 	"postCreateCommand": "npm install && npx prisma generate",
+	"updateRemoteUserUID": true,
 	"forwardPorts": [3000, 5173, 4573, 3306]
 }

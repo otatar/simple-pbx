@@ -1,6 +1,7 @@
 node_modules
 .env
-.env.*
+.env.production
+.env.development
 prisma/generated/
 packages/web/build/
 volumes/asterisk/config/
