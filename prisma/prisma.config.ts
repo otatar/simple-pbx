@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { defineConfig } from "@prisma/config";
 
 export default defineConfig({
@@ -6,6 +7,6 @@ export default defineConfig({
     path: "migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL || "mysql://asterisk:Hsterisk.2024@192.168.6.210:3306/asterisk",
+    url: process.env.DATABASE_URL
   },
 });
